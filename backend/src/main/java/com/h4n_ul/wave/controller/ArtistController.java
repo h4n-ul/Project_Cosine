@@ -20,6 +20,8 @@ import com.h4n_ul.wave.service.ArtistService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -67,5 +69,24 @@ public class ArtistController {
         response.put("loginuid", target.getUid());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("logout")
+    public ResponseEntity<String> logout(HttpServletRequest servlet) {
+        HttpSession session = servlet.getSession(false);
+        if (session == null) {
+            return new ResponseEntity<>("invalidation unsuccessful", HttpStatus.BAD_REQUEST);
+        }
+        session.invalidate();
+
+        return new ResponseEntity<>("invalidated", HttpStatus.OK);
+    }
+
+    @GetMapping("getLoginInfo")
+    public ResponseEntity<String> getLoginInfo(HttpServletRequest servlet) {
+        HttpSession session = servlet.getSession(false);
+        if (session == null) return new ResponseEntity<>(null, HttpStatus.OK);
+        System.out.println(session.getId());
+        return new ResponseEntity<>(session.getId(), HttpStatus.OK);
     }
 }
