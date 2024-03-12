@@ -11,7 +11,7 @@ const NewHall = () => {
     try {
       const response = await axios.post(
         "http://localhost:8080/backend/hall/create",
-        { artistId, password },
+        { hallName: hname, description: hdesc, src: hsrc },
         { withCredentials: true }
       );
       window.location.reload();
