@@ -1,34 +1,30 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const Login = ({ setForm }) => {
   const [artistId, setArtistId] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const response = await fetch('http://localhost:8080/backend/artists/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ artistId, password }),
-    });
-    const data = await response.json();
-    console.log(data)
-    if (data.sessionId) {
-      document.cookie = `JSESSIONID=${data.sessionId}; path=/`;
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/backend/artists/login",
+        { artistId, password },
+        { withCredentials: true }
+      );
       window.location.reload();
-    } else {
-      alert(data.message)
+    } catch (error) {
+      console.error("Login failed:", error.response.data.message);
     }
-  };  
+  };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleLogin}>
       <div>
         <input 
           placeholder="ID/Email" 
-          className="input input-bordered w-100" 
+          className="input input-bordered w-96" 
           value={artistId} 
           onChange={(e) => setArtistId(e.target.value)}
         />
@@ -36,7 +32,7 @@ const Login = ({ setForm }) => {
       <div>
         <input 
           placeholder="Password" 
-          className="input input-bordered w-100" 
+          className="input input-bordered w-96" 
           type="password" 
           value={password} 
           onChange={(e) => setPassword(e.target.value)}
@@ -46,7 +42,7 @@ const Login = ({ setForm }) => {
         Remember me
         <input type="checkbox" className="toggle" />
       </label>
-      <div className="w-100">
+      <div className="w-96">
         <button type="button" className="btn btn-xs" onClick={()=>setForm('register')}>No account?</button>
         <button type="submit" className="btn btn-neutral">Login</button>
       </div>

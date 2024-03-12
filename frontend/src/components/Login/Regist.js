@@ -38,7 +38,7 @@ const Register = ({ setForm }) => {
       <div>
         <input 
           placeholder="ID" 
-          className="input input-bordered" 
+          className="input input-bordered w-96" 
           value={artistId} 
           onChange={(e) => setArtistId(e.target.value)}
         />
@@ -46,7 +46,7 @@ const Register = ({ setForm }) => {
       <div>
         <input 
           placeholder="Email" 
-          className="input input-bordered" 
+          className="input input-bordered w-96" 
           value={email} 
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -54,7 +54,7 @@ const Register = ({ setForm }) => {
       <div>
         <input 
           placeholder="Password" 
-          className="input input-bordered" 
+          className="input input-bordered w-96" 
           type="password"
           value={password} 
           onChange={(e) => setPassword(e.target.value)}
@@ -63,7 +63,7 @@ const Register = ({ setForm }) => {
       <div>
         <input 
           placeholder="Re-enter Password" 
-          className="input input-bordered" 
+          className="input input-bordered w-96" 
           type="password"
           value={passwordConfirm} 
           onChange={(e) => setPasswordConfirm(e.target.value)}

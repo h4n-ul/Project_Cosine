@@ -42,9 +42,9 @@ public class ArtistController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO loginDTO, HttpServletRequest servlet) {
-        HttpSession session = servlet.getSession(true);
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO loginDTO, HttpServletRequest request) {
+        HttpSession session = request.getSession(true);
         Optional<Artist> targetOpt = artistRepo.findByArtistId(loginDTO.getArtistId());
         Artist target = null;
         if (!targetOpt.isPresent()) {
@@ -58,35 +58,50 @@ public class ArtistController {
         target = targetOpt.get();
         Boolean pwMatch = artistSvc.login(loginDTO.getArtistId(), loginDTO.getPassword());
         Map<String, String> response = new HashMap<>();
-        
+
         if (pwMatch == false) {
             response.put("message", "Invalid Password");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
-        session.setAttribute("loginuid", target.getUid());
-        response.put("sessionId", session.getId());
-        response.put("loginuid", target.getUid());
-
+        // 로그인 성공 처리
+        session.setAttribute("loggedInArtist", target);
+        response.put("message", "Login successful");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("logout")
-    public ResponseEntity<String> logout(HttpServletRequest servlet) {
-        HttpSession session = servlet.getSession(false);
-        if (session == null) {
-            return new ResponseEntity<>("invalidation unsuccessful", HttpStatus.BAD_REQUEST);
+    @PostMapping("/logout")
+    public ResponseEntity<Map<String, String>> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate(); // 세션 무효화
         }
-        session.invalidate();
-
-        return new ResponseEntity<>("invalidated", HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Logout successful");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("getLoginInfo")
-    public ResponseEntity<String> getLoginInfo(HttpServletRequest servlet) {
-        HttpSession session = servlet.getSession(false);
-        if (session == null) return new ResponseEntity<>(null, HttpStatus.OK);
-        System.out.println(session.getId());
-        return new ResponseEntity<>(session.getId(), HttpStatus.OK);
+    @GetMapping("/getLoginInfo")
+    public ResponseEntity<Map<String, String>> getLoginInfo(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        Map<String, String> response = new HashMap<>();
+
+        if (session == null) {
+            response.put("message", "No active session");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+
+        // 세션에서 로그인 정보 가져오기
+        Artist loggedInArtist = (Artist) session.getAttribute("loggedInArtist");
+        if (loggedInArtist == null) {
+            response.put("message", "No logged in user");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+
+        // 로그인 정보 반환
+        response.put("artistId", loggedInArtist.getArtistId());
+        response.put("email", loggedInArtist.getEmail());
+        response.put("sessionId", session.getId());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

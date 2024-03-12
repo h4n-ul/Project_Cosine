@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Modal from './Login/Modal';
 import axios from 'axios';
+import NewHall from './NewHall/Modal';
 
 const Header = () => {
   const checkLoginStatus = async () => {
@@ -9,8 +10,7 @@ const Header = () => {
         withCredentials: true
       });
   
-      const sessionId = response.data;
-      console.log(sessionId)
+      const sessionId = response.data.sessionId;
       return sessionId !== '';
     } catch (error) {
       console.error('Failed to check login status:', error);
@@ -20,22 +20,16 @@ const Header = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleLogout = async (e) => {
-    e.preventDefault();
-    const response = await fetch('http://localhost:8080/backend/artists/logout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ /* 필요한 데이터를 전송하세요 */ }),
-      withCredentials: true
-    });
-
-    if (response.ok) { // 로그아웃 요청이 성공했을 경우
-      document.cookie = "JSESSIONID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:8080/backend/artists/logout",
+        {},
+        { withCredentials: true }
+      );
       window.location.reload();
-    } else {
-      alert('Logout failed') // 실패했을 경우에 대한 처리를 추가하세요
+    } catch (error) {
+      console.error("Logout failed:", error.response.data.message);
     }
   };
 
@@ -53,7 +47,7 @@ const Header = () => {
       <a href="/" style={{margin: '20px'}}>Home</a>
       <a href="/search" style={{margin: '20px'}}>Search</a>
       {isLoggedIn
-      ?<><a href="/profile" style={{margin: '20px'}}>Profile</a><button className='btn' style={{margin: '20px'}} onClick={handleLogout}>Logout</button></>
+      ?<><a href="/profile" style={{margin: '20px'}}>Profile</a><button className='btn' style={{margin: '20px'}} onClick={handleLogout}>Logout</button><NewHall/></>
       :<Modal/>
       }
     </header>
