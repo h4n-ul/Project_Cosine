@@ -9,6 +9,7 @@ import com.h4n_ul.wave.entity.Mixtape;
 import com.h4n_ul.wave.repository.ArtistRepo;
 import com.h4n_ul.wave.repository.MixRepo;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -16,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class MixService {
     private final MixRepo mixRepo;
     private final ArtistRepo artistRepo;
-    public Mixtape createMix(String ownerId, String title, String contents, List<FileArchive> files) {
+    public Mixtape createMix(@NonNull String ownerId, String title, String contents, List<FileArchive> files) {
         Mixtape target = new Mixtape();
 
         target.setTitle(title);

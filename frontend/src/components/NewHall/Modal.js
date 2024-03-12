@@ -1,11 +1,24 @@
 import React, { useState } from "react";
+import axios from 'axios';
 
 const NewHall = () => {
   const [hname, setHname] = useState()
   const [hdesc, setHdesc] = useState()
   const [hsrc, setHsrc] = useState()
 
-  const handleCreateNewHall = () => {}
+  const handleCreateNewHall = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/backend/hall/create",
+        { artistId, password },
+        { withCredentials: true }
+      );
+      window.location.reload();
+    } catch (error) {
+      console.error("Login failed:", error.response.data.message);
+    }
+  };
 
   return (
     <>

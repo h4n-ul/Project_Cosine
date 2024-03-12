@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.h4n_ul.wave.service.FileService;
+// import com.h4n_ul.wave.service.FileService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequiredArgsConstructor
 @RequestMapping("backend/stream")
 public class Player {
-    private final FileService fileService;
+    // private final FileService fileService;
     private final Tika tika = new Tika();
 
     @GetMapping("/{id}")

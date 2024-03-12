@@ -17,7 +17,7 @@ public class FileService {
     public FileArchive getFile(String id) {
         if (id != null) {
             Optional<FileArchive> file = fileRepo.findById(id); 
-            return file.get();
+            try {return file.get();} catch (Exception e) {return null;}
         }
         else throw new DataNotFoundException("");
     }
