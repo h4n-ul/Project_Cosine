@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.h4n_ul.wave.entity.FileArchive;
+import com.h4n_ul.wave.entity.Hall;
 import com.h4n_ul.wave.entity.Mixtape;
 import com.h4n_ul.wave.repository.ArtistRepo;
 import com.h4n_ul.wave.repository.MixRepo;
@@ -27,5 +28,10 @@ public class MixService {
 
         mixRepo.save(target);
         return null;
+    }
+    
+    public List<Mixtape> getAllByHall(@NonNull Hall hallId) {
+        List<Mixtape> mixlist = mixRepo.findByHallId(hallId);
+        return mixlist;
     }
 }
