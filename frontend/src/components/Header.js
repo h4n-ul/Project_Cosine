@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Modal from './Login/Modal';
 import axios from 'axios';
 import NewHall from './NewHall/Modal';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   const checkLoginStatus = async () => {
@@ -44,10 +45,10 @@ const Header = () => {
   return (
     <header style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
       <div className="logo" style={{margin: '20px'}}>Your Logo</div>
-      <a href="/" style={{margin: '20px'}}>Home</a>
-      <a href="/search" style={{margin: '20px'}}>Search</a>
+      <Link href="/" style={{margin: '20px'}}>Home</Link>
+      <Link href="/search" style={{margin: '20px'}}>Search</Link>
       {isLoggedIn
-      ?<><a href="/profile" style={{margin: '20px'}}>Profile</a><button className='btn' style={{margin: '20px'}} onClick={handleLogout}>Logout</button><NewHall/></>
+      ?<><Link href="/profile" style={{margin: '20px'}}>Profile</Link><button className='btn' style={{margin: '20px'}} onClick={handleLogout}>Logout</button><NewHall/></>
       :<Modal/>
       }
     </header>

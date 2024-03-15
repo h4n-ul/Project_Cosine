@@ -34,10 +34,10 @@ public class ArtistController {
     public ResponseEntity<Map<String, String>> regist(@RequestBody RegistDTO registDTO, HttpSession session) {
         Artist target = artistSvc.regist(registDTO.getArtistId(), registDTO.getPassword(), registDTO.getEmail());
 
-        session.setAttribute("loginuid", target.getUid());
+        session.setAttribute("loggedInArtist", target.getUid());
         Map<String, String> response = new HashMap<>();
         response.put("sessionId", session.getId());
-        response.put("loginuid", target.getUid());
+        response.put("loggedInArtist", target.getUid());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -82,26 +82,16 @@ public class ArtistController {
     }
 
     @GetMapping("/getLoginInfo")
-    public ResponseEntity<Map<String, String>> getLoginInfo(HttpServletRequest request) {
+    public ResponseEntity<Artist> getLoginInfo(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        Map<String, String> response = new HashMap<>();
-
         if (session == null) {
-            response.put("message", "No active session");
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        // 세션에서 로그인 정보 가져오기
         Artist loggedInArtist = (Artist) session.getAttribute("loggedInArtist");
         if (loggedInArtist == null) {
-            response.put("message", "No logged in user");
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-
-        // 로그인 정보 반환
-        response.put("artistId", loggedInArtist.getArtistId());
-        response.put("email", loggedInArtist.getEmail());
-        response.put("sessionId", session.getId());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(loggedInArtist, HttpStatus.OK);
     }
 }

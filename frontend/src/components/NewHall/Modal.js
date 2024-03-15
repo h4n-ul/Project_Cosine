@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { redirect } from 'react-router-dom';
 import axios from 'axios';
 
 const NewHall = () => {
@@ -14,7 +15,7 @@ const NewHall = () => {
         { hallName: hname, description: hdesc, src: hsrc },
         { withCredentials: true }
       );
-      window.location.reload();
+      return redirect(`/b/${hsrc}`)
     } catch (error) {
       console.error("Login failed:", error.response.data.message);
     }

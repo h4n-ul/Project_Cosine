@@ -15,5 +15,4 @@ public class FileArchive {
 
     private String origFileName;
     private String location;
-    private String isMusic;
 }

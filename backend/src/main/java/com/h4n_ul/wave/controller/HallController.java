@@ -12,12 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.h4n_ul.wave.controller.dto.CreateHallDTO;
 import com.h4n_ul.wave.entity.Artist;
-import com.h4n_ul.wave.repository.ArtistRepo;
+import com.h4n_ul.wave.entity.Hall;
+import com.h4n_ul.wave.repository.MixRepo;
 import com.h4n_ul.wave.service.ArtistService;
+import com.h4n_ul.wave.service.HallService;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 @Controller
@@ -25,29 +29,44 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/backend/hall")
 public class HallController {
     public final ArtistService artistSvc;
-    public final ArtistRepo artistRepo;
+    public final MixRepo mixRepo;
+    public final ArtistController artistContr;
+    public final HallService hallService;
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, String>> create(@RequestBody CreateHallDTO createHallDTO, HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
+        ResponseEntity<Artist> artist = artistContr.getLoginInfo(request);
         Map<String, String> response = new HashMap<>();
-
-        if (session == null) {
-            response.put("message", "No active session");
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        if (!artist.getStatusCode().is2xxSuccessful()) {
+            response.put("message", "Unauthorized");
+            return new ResponseEntity<>(response, artist.getStatusCode());
         }
 
-        Artist loggedInArtist = (Artist) session.getAttribute("loggedInArtist");
-        if (loggedInArtist == null) {
-            response.put("message", "No logged in user");
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        Artist targetArtist = artist.getBody();
+        
+        hallService.create(createHallDTO.getHallName(), createHallDTO.getDescription(), createHallDTO.getSrc(), targetArtist.getUid());
+
+        response.put("message", "Hall created successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> getHall(@PathVariable("id") String id) {
+        Hall h = hallService.get(id);
+        Map<String, Object> response = new HashMap<>();
+        if (h == null) {
+            response.put("message", "Not found");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        return null;
+        response.put("hallId", h.getHallId());
+        response.put("title", h.getTitle());
+        response.put("description", h.getDescription());
+        response.put("src", h.getSrc());
+        response.put("managerId", h.getManager().getUid());
+        response.put("managerName", h.getManager().getArtistId());
+        response.put("mixtapes", mixRepo.findByHallId(id));
 
-        // response.put("artistId", loggedInArtist.getArtistId());
-        // response.put("email", loggedInArtist.getEmail());
-        // response.put("sessionId", session.getId());
-        // return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
