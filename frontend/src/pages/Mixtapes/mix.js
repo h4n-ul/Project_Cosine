@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router-dom';
 import remarkGfm from 'remark-gfm'
+import { StreamProvider, StreamContext } from '../../services/StreamContext';
 
 const Mixtape = () => {
   const { hall, mix } = useParams()
@@ -9,6 +10,13 @@ const Mixtape = () => {
   const title = 'abc'
   const contents = 'xyz'
   const markdown = false
+
+  const { setStreamId } = useContext(StreamContext);
+
+  const handleStreamIdChange = (newStreamId) => {
+    setStreamId(newStreamId);
+  };
+
   return (
     <div>
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>

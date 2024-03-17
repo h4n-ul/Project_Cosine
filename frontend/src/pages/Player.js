@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import '../main.css'
 import axios from 'axios';
 import videojs from 'video.js';
 
@@ -67,12 +68,13 @@ function AudioPlayer({streamId}) {
     }    
 
     return (
-        <div>
+        <div style={{display: 'flex', alignItems: 'center', margin: '10px'}}>
             <div data-vjs-player>
                 <audio ref={audioRef} className="video-js"></audio>
             </div>
-            <button onClick={togglePlay}>{playing ? 'Pause' : 'Play'}</button>
-            <input type="range" min="0" max="1" step="any" value={progress} onChange={handleSliderChange} />
+            <button className='btn' onClick={togglePlay}>{playing ? 'Pause' : 'Play'}</button>
+            <input type="range" min={0} max="1" step="any" className="range range-sm w-80" value={progress} onChange={handleSliderChange} 
+            style={{marginLeft: '10px'}}/>
         </div>
     );
 }
