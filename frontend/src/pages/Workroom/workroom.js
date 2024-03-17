@@ -44,7 +44,7 @@ const Workroom = () => {
           />
         </div>
         <div role="tablist" class="tabs tabs-lifted" style={{margin: '10px'}}>
-          <input type="radio" name="preview" role="tab" class="tab" aria-label="Editor" />
+          <input type="radio" name="preview" role="tab" class="tab" aria-label="Editor" checked/>
           <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box">
             <textarea
               className="textarea input-bordered w-full p-4"
