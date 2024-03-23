@@ -46,6 +46,10 @@ public class HallController {
 
         Artist targetArtist = artist.getBody();
         
+        if (getHall(createHallDTO.getSrc()) != null) {
+            response.put("message", "Link already exists");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
         hallService.create(createHallDTO.getHallName(), createHallDTO.getDescription(), createHallDTO.getSrc(), targetArtist.getUid());
 
         response.put("message", "Hall created successfully");

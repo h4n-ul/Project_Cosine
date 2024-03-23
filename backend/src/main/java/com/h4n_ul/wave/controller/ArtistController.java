@@ -34,7 +34,7 @@ public class ArtistController {
     public ResponseEntity<Map<String, String>> regist(@RequestBody RegistDTO registDTO, HttpSession session) {
         Artist target = artistSvc.regist(registDTO.getArtistId(), registDTO.getPassword(), registDTO.getEmail());
 
-        session.setAttribute("loggedInArtist", target.getUid());
+        session.setAttribute("loggedInArtist", target);
         Map<String, String> response = new HashMap<>();
         response.put("sessionId", session.getId());
         response.put("loggedInArtist", target.getUid());

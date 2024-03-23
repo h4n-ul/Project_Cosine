@@ -30,31 +30,40 @@ const NewHall = () => {
             <form method="dialog">
               <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
               <form onSubmit={handleCreateNewHall}>
-                <div>
-                  <input 
-                    placeholder="Hall name" 
-                    className="input input-bordered w-96" 
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Hall name</span>
+                  </label>
+                  <input
+                    placeholder="Hall name"
+                    className="input input-bordered w-96"
                     value={hname} 
                     onChange={(e) => setHname(e.target.value)}
                   />
                 </div>
-                <div>
-                  <input 
-                    placeholder="Hall description" 
-                    className="input input-bordered w-96" 
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Description</span>
+                  </label>
+                  <input
+                    placeholder="Hall description"
+                    className="input input-bordered w-96"
                     value={hdesc} 
                     onChange={(e) => setHdesc(e.target.value)}
                   />
                 </div>
-                <div>
-                  <input 
-                    placeholder="Link" 
-                    className="input input-bordered w-96" 
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Hall link</span>
+                  </label>
+                  <input
+                    placeholder="Link"
+                    className="input input-bordered w-96"
                     value={hsrc} 
                     onChange={(e) => setHsrc(e.target.value)}
                   />
                 </div>
-                <div className="w-96">
+                <div className="w-96 modal-action">
                   <button type="submit" className="btn btn-neutral">Create!</button>
                 </div>
               </form>

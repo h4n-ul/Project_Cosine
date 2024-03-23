@@ -3,6 +3,7 @@ package com.h4n_ul.wave.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.h4n_ul.wave.entity.Artist;
 import com.h4n_ul.wave.entity.Mixtape;
 import com.h4n_ul.wave.service.MixService;
 
@@ -24,8 +25,7 @@ public class MixtapeController {
     public Mixtape createMix(HttpServletRequest request, String title, String contents) {
         HttpSession session = request.getSession(false);
         System.out.println(session.getId());
-        String loggedInArtist = (String) session.getAttribute("loggedInArtist");
-        System.out.println(loggedInArtist);
+        Artist loggedInArtist = (Artist) session.getAttribute("loggedInArtist");
         mixSvc.createMix(loggedInArtist, title, contents, null);
         return null;
     }
