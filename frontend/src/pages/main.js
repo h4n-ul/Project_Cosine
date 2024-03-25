@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import Studio from './Studio/studio';
 import NotFound from './NotFound/404';
 import LoginPage from './Artist/login';
-import Mixtape from './Mixtapes/mix';
+import Reel from './Reels/reel';
 import Hall from './Hall/hall';
 import Workroom from './Workroom/workroom';
 import { StreamProvider, StreamContext } from '../services/StreamContext';
@@ -31,7 +31,7 @@ const MainContents = () => {
         <Route path="/" element={<Studio />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/b/:hall" element={<Hall />}></Route>
-        <Route path="/b/:hall/:mix" element={<Mixtape />}></Route>
+        <Route path="/b/:hall/:mix" element={<Reel />}></Route>
         <Route path="/*" element={<NotFound />}></Route>
       </Routes>
       {data.streamId != '' ? 

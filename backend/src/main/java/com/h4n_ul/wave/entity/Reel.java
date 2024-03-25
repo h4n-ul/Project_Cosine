@@ -1,5 +1,6 @@
 package com.h4n_ul.wave.entity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -14,9 +15,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Mixtape {
+public class Reel {
     @Id @Column(length = 1000)
-    private String mixId;
+    private String reelId;
 
     @ManyToOne
     private Hall hallId;
@@ -29,4 +30,12 @@ public class Mixtape {
     private Artist owner;
     @OneToMany
     private List<FileArchive> files;
+    @OneToMany
+    private List<AudioArchs> audiofiles;
+
+    private List<Artist> master;
+    private List<Artist> degausse;
+
+    private LocalDateTime release;
+    private LocalDateTime lastRework;
 }

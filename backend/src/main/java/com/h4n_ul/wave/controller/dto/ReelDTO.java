@@ -1,7 +1,6 @@
 package com.h4n_ul.wave.controller.dto;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,15 +9,18 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MixDTO {
+public class ReelDTO {
     private String title;
     private String contents;
-    private List<MultipartFile> file;
-    private List<Map<MultipartFile, AudioMetadata>> audioFiles;
+    private String hallId;
+    private List<MultipartFile> files;
+    private List<AudioFiles> audioFiles;
 
     @Getter
     @Setter
-    private static class AudioMetadata {
+    public
+    static class AudioFiles {
+        private MultipartFile file;
         private String title;
         private String artist;
     }

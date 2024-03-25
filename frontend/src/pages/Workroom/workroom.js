@@ -7,14 +7,13 @@ import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 // import ImageResize from 'quill-image-resize-module';
 
-// Quill.register('modules/ImageResize', ImageResize)
+// Quill.register('modules/imageResize', ImageResize)
 
 const Workroom = () => {
   const { hall } = useParams()
   const { isLoggedIn } = useContext(AuthContext);
   const [title, setTitle] = useState('');
   const [contents, setContents] = useState('');
-  const [markdown, setMarkdown] = useState(false);
   const [files, setFiles] = useState([]);
 
   const handleSubmit = async (e) => {
@@ -22,6 +21,7 @@ const Workroom = () => {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('contents', contents);
+    formData.append('hallId', hall);
   
     const afiles = [];
     const nonaudio = [];
@@ -44,7 +44,7 @@ const Workroom = () => {
     };
   
     afiles.forEach((item, index) => {
-      formData.append(`audio[${index}]`, item.file);
+      formData.append(`audio[${index}].file`, item.file);
       formData.append(`audio[${index}].title`, item.metadata.title);
       formData.append(`audio[${index}].artist`, item.metadata.artist);
     });
@@ -82,9 +82,9 @@ const Workroom = () => {
             onChange={setContents}
             modules={modules}
             formats={formats}
+            style={{ height: '500px', marginBottom: '50px' }}
           />
         </div>
-        <div><input type="checkbox" className="btn btn-xs" aria-label="Enable Markdown" checked={markdown} onChange={(e) => setMarkdown(e.target.checked)} style={{margin: '10px'}}/></div>
         <div><input className="file-input w-full max-w-xs" id="multiple_files" type="file" multiple onChange={handleFileChange} style={{margin: '10px'}}/></div>
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}><button className="btn btn-wide" type="submit" style={{margin: '10px'}}>Upload!</button></div>
       </form>

@@ -31,6 +31,9 @@ const Register = ({ setForm }) => {
     });
     const data = await response.json();
     console.log(data)
+    if (response.status == 200) {
+      window.location.reload();
+    }
   };
 
   return (
