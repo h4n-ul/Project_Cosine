@@ -27,11 +27,10 @@ const Workroom = () => {
     const nonaudio = [];
   
     for (const file of files) {
-      const mimeType = file.type; // getMimeType 함수를 구현해야 합니다.
+      const mimeType = file.type;
   
       if (mimeType.startsWith('audio/')) {
-        // Audio 파일인 경우
-        const metadata = await showMetadataModal(file); // showMetadataModal 함수를 구현해야 합니다.
+        const metadata = await showMetadataModal(file);
   
         if (metadata) {
           afiles.push({ file, metadata });
