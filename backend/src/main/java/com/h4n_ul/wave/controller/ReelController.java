@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 
 import com.h4n_ul.wave.controller.dto.ReelDTO;
 import com.h4n_ul.wave.entity.Artist;
@@ -19,9 +20,9 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,22 +32,21 @@ public class ReelController {
     private final HallService hallSvc;
 
     @PostMapping("create")
-        public ResponseEntity<Map<String, String>> createReel(HttpServletRequest request, @RequestBody ReelDTO reelDTO) {
-            HttpSession session = request.getSession(false);
-            Map<String, String> response = new HashMap<>();
-            if (session == null) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
-
-            Artist targetArtist = (Artist) session.getAttribute("loggedInArtist");
-            if (targetArtist == null) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
-
-            Artist loggedInArtist = (Artist) session.getAttribute("loggedInArtist");
-            reelSvc.createReel(loggedInArtist, reelDTO.getTitle(), reelDTO.getContents(), hallSvc.get(reelDTO.getHallId()), reelDTO.getFiles(), reelDTO.getAudioFiles());
-            return null;
+    public ResponseEntity<Map<String, String>> createReel(HttpServletRequest request, @ModelAttribute ReelDTO reelDTO) {
+        HttpSession session = request.getSession(false);
+        // Map<String, String> response = new HashMap<>();
+        if (session == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+
+        Artist targetArtist = (Artist) session.getAttribute("loggedInArtist");
+        if (targetArtist == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        reelSvc.createReel(targetArtist, reelDTO.getTitle(), reelDTO.getContents(), hallSvc.get(reelDTO.getHallId()), reelDTO.getFiles(), reelDTO.getAudioFiles());
+        return null;
+    }
 
     @GetMapping("{id}")
     public ResponseEntity<Map<String, Object>> getReel(@PathVariable("id") String id) {

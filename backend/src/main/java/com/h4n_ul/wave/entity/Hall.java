@@ -27,12 +27,12 @@ public class Hall {
     private String src;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "artist_uid")
+    @JoinColumn(name = "Hall_manager")
     private Artist manager;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "Hall_managers",
+        name = "Hall_subManagers",
         joinColumns = @JoinColumn(name = "hall_hallId"),
         inverseJoinColumns = @JoinColumn(name = "artist_uid")
     )

@@ -7,6 +7,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
@@ -26,14 +27,16 @@ public class Reel {
     private String contents;
 
     @ManyToOne
-    @JoinColumn(name = "artist_uid")
+    @JoinColumn(name = "created_by")
     private Artist owner;
     @OneToMany
     private List<FileArchive> files;
     @OneToMany
     private List<AudioArchs> audiofiles;
 
+    @ManyToMany
     private List<Artist> master;
+    @ManyToMany
     private List<Artist> degausse;
 
     private LocalDateTime release;

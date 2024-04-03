@@ -52,8 +52,8 @@ const Workroom = () => {
       formData.append(`files[${index}]`, file, file.name);
     });
   
-    const response = await axios.post('http://localhost:8080/backend/mixtape/create', formData, {
-      headers: {
+    const response = await axios.post('http://localhost:8080/backend/reel/create', formData, {
+      header: {
         'Content-Type': 'multipart/form-data'
       },
       withCredentials: true
@@ -61,7 +61,7 @@ const Workroom = () => {
   };
 
   const handleFileChange = (e) => {
-    setFiles(Array.from(e.target.files)); // FileList를 배열로 변환
+    setFiles(Array.from(e.target.files));
   };
 
   return (
