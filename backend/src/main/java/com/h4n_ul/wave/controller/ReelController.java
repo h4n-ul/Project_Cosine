@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 
 import com.h4n_ul.wave.controller.dto.ReelDTO;
 import com.h4n_ul.wave.entity.Artist;
@@ -32,9 +31,9 @@ public class ReelController {
     private final HallService hallSvc;
 
     @PostMapping("create")
-    public ResponseEntity<Map<String, String>> createReel(HttpServletRequest request, @ModelAttribute ReelDTO reelDTO) {
+    public ResponseEntity<Map<String, Reel>> createReel(HttpServletRequest request, @ModelAttribute ReelDTO reelDTO) {
         HttpSession session = request.getSession(false);
-        // Map<String, String> response = new HashMap<>();
+        Map<String, Reel> response = new HashMap<>();
         if (session == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -44,28 +43,23 @@ public class ReelController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        reelSvc.createReel(targetArtist, reelDTO.getTitle(), reelDTO.getContents(), hallSvc.get(reelDTO.getHallId()), reelDTO.getFiles(), reelDTO.getAudioFiles());
-        return null;
+        Reel reel = reelSvc.createReel(targetArtist, reelDTO.getTitle(), reelDTO.getContents(), hallSvc.get(reelDTO.getHallId()), reelDTO.getFiles(), reelDTO.getAudioFiles());
+        response.put("reel", reel);
+        System.out.println(reel);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Map<String, Object>> getReel(@PathVariable("id") String id) {
         System.out.println(id);
-        Reel reeltape = reelSvc.getById(id);
+        Reel reel = reelSvc.getById(id);
         Map<String, Object> response = new HashMap<>();
-        if (reeltape == null) {
+        if (reel == null) {
             response.put("message", "Not found");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        response.put("reelId", reeltape.getReelId());
-        response.put("title", reeltape.getTitle());
-        response.put("contents", reeltape.getContents());
-        response.put("owner", reeltape.getOwner());
-        response.put("hallId", reeltape.getHallId());
-        response.put("release", reeltape.getRelease());
-        response.put("lastRework", reeltape.getLastRework());
-        response.put("files", reeltape.getFiles());
+        response.put("reelId", reel);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

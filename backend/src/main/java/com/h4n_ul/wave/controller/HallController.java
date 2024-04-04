@@ -89,7 +89,7 @@ public class HallController {
         response.put("managerName", h.getManager().getArtistId());
 
         List<Reel> reelList = reelService.getAllByHall(h);
-        response.put("reeltapes", reelList);
+        response.put("reels", reelList);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

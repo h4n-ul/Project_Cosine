@@ -3,6 +3,8 @@ package com.h4n_ul.wave.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -16,6 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Reel {
     @Id @Column(length = 1000)
     private String reelId;
