@@ -31,7 +31,7 @@ const MainContents = () => {
         <Route path="/" element={<Studio />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/b/:hall" element={<Hall />}></Route>
-        <Route path="/b/:hall/:mix" element={<Reel />}></Route>
+        <Route path="/b/:hall/:reel" element={<Reel />}></Route>
         <Route path="/*" element={<NotFound />}></Route>
       </Routes>
       {data.streamId != '' ? 

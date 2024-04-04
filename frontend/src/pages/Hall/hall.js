@@ -29,7 +29,19 @@ const Hall = () => {
   }, [hall]);
 
   if (!hallInfo) {
-    return <div>Loading...</div>;
+    return (
+    <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
+      <div className='prose' style={{width: '60%'}}>
+        <h1 style={{margin: '10px', fontSize: '1.5rem', fontWeight: '900'}}>UNDEFINED</h1>
+        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+          <p style={{marginLeft: '10px'}}>undefined</p>
+          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: '10px'}}>
+            <p style={{fontWeight: '200'}}>Manager: undefined</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    );
   }
 
   return (
@@ -39,13 +51,13 @@ const Hall = () => {
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
           <p style={{marginLeft: '10px'}}>{hallInfo.description}</p>
           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: '10px'}}>
-            <p style={{fontWeight: '200'}}>매니저: {hallInfo.managerName}</p>
+            <p style={{fontWeight: '200'}}>Manager: {hallInfo.managerName}</p>
           </div>
         </div>
         <div>
           <ul>
-            {hallInfo.mixtapes?.map((mixtape) => (
-              <li key={mixtape.id}>{mixtape.name}</li>
+            {hallInfo.reels?.map((reel) => (
+              <li key={reel.reelId}><Link to={`/b/${hall}/${reel.reelId}`}>{reel.title}</Link></li>
             ))}
           </ul>
           <Link className="btn btn-circle" to={`/workroom/${hall}`}>

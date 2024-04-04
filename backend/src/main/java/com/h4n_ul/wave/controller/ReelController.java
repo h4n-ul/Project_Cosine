@@ -59,7 +59,7 @@ public class ReelController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        response.put("reelId", reel);
+        response.put("data", reel);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
