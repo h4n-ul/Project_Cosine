@@ -12,13 +12,13 @@ function AudioPlayer({streamId}) {
     useEffect(() => {
         let isMounted = true;
         const vjsPlayer = videojs(audioRef.current, { controls: true });
-    
+
         vjsPlayer.on('timeupdate', () => {
             setProgress(vjsPlayer.currentTime() / vjsPlayer.duration());
         });
-    
+
         setPlayer(vjsPlayer);
-    
+
         axios({
             url: `http://localhost:8080/backend/stream/${streamId}`,
             method: 'GET',
@@ -32,19 +32,19 @@ function AudioPlayer({streamId}) {
                 console.log(audioBlob)
             }
         });
-        
+
         return () => {
             isMounted = false; 
             vjsPlayer.dispose();
         };
     }, [streamId]);
-    
+
 
     const togglePlay = () => {
         if (player) {
             if (playing) {
                 let playPromise = player.play();
-    
+
                 if (playPromise !== undefined) {
                     playPromise.then(_ => {
                         player.pause();
@@ -56,7 +56,7 @@ function AudioPlayer({streamId}) {
             } else {
                 player.play();
             }
-    
+
             setPlaying(!playing);
         }
     }
@@ -65,7 +65,7 @@ function AudioPlayer({streamId}) {
         const newProgress = e.target.value;
         setProgress(newProgress);
         player.currentTime(newProgress * player.duration());
-    }    
+    }
 
     return (
         <div style={{display: 'flex', alignItems: 'center', margin: '10px'}}>

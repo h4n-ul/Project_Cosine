@@ -73,7 +73,7 @@ const NewHall = () => {
         </div>
       </dialog>
     </>
-    
+
   );
 }
 

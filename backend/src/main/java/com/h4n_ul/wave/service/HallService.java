@@ -1,6 +1,7 @@
 package com.h4n_ul.wave.service;
 
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -43,5 +44,18 @@ public class HallService {
             return null;
         }
         return hallOpt.get();
+    }
+
+    public List<Hall> search(String query, String filter) {
+        List<Hall> hallList;
+
+        if (filter.equals("title")){
+            hallList = hRepo.findByTitleContaining(query);
+        }
+        else if (filter.equals("description")){
+            hallList = hRepo.findByDescriptionContaining(query);
+        }
+        else{return null;}
+        return hallList;
     }
 }

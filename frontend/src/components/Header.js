@@ -22,11 +22,30 @@ const Header = () => {
     }
   };
 
+  const handleSearch = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/backend/search",
+        {},
+        { withCredentials: true }
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Search failed:", error.response.data.message);
+    }
+  };
+
   return (
     <header style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-      <div className="logo" style={{margin: '20px'}}>Your Logo</div>
-      <Link to="/" style={{margin: '20px'}}>Home</Link>
-      <Link to="/search" style={{margin: '20px'}}>Search</Link>
+      <Link to="/" style={{margin: '20px', fontWeight: '800'}}>Project Cosine</Link>
+      <div className="dropdown"  style={{margin: '20px'}}>
+        <div tabIndex={0} role="button" className="m-1">Search</div>
+        <div tabIndex={0} className="dropdown-content z-[1] card card-compact w-64 p-2 shadow ">
+          <form onSubmit={handleSearch}>
+            <input type="text" placeholder="Type here" className="input w-full max-w-xs" />
+          </form>
+        </div>
+      </div>
       {isLoggedIn
       ?<><Link to="/profile" style={{margin: '20px'}}>Profile</Link><button className='btn' style={{margin: '20px'}} onClick={handleLogout}>Logout</button><NewHall/></>
       :<Modal/>

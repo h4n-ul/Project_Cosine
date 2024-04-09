@@ -85,8 +85,6 @@ public class ReelService {
         }
         target.setAudiofiles(audioArchiveList);
 
-        // should save files to absolute directory and map to FileArchive and AudioArchs
-
         target.setHallId(hid);
         target.setRelease(LocalDateTime.now());
         target.setLastRework(LocalDateTime.now());

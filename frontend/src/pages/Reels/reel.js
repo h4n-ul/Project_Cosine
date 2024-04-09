@@ -17,7 +17,7 @@ const Reel = () => {
         withCredentials: true
       });
       console.log(response);
-      return response.data.data;
+      return response.data;
     } catch (error) {
       console.error('Failed to fetch data:', error);
       return null;
@@ -38,6 +38,22 @@ const Reel = () => {
     setStreamId(newStreamId);
   };
 
+  if (!reelInfo) {
+    return (
+      <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
+        <div className='prose' style={{width: '60%'}}>
+          <h1 style={{margin: '10px', fontSize: '1.5rem', fontWeight: '900'}}>Loading...</h1>
+          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+            <p style={{marginLeft: '10px'}}>Loading...</p>
+            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: '10px'}}>
+              <p style={{fontWeight: '200', fontSize: '10px'}}>Loading...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
       <div className='prose' style={{width: '60%'}}>
@@ -45,7 +61,7 @@ const Reel = () => {
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
           <p style={{marginLeft: '10px'}}>{reelInfo.owner.artistId}</p>
           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: '10px'}}>
-            <p style={{fontWeight: '200', fontSize: '10px'}}>{hall}/{reel}</p>
+            <p style={{fontWeight: '200', fontSize: '10px'}}>{reelInfo.link}</p>
           </div>
         </div>
         <div dangerouslySetInnerHTML={{__html: reelInfo.contents}}/>

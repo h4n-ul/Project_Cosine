@@ -5,11 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.h4n_ul.wave.entity.Artist;
+import com.h4n_ul.wave.entity.Hall;
 import com.h4n_ul.wave.service.ArtistService;
 import com.h4n_ul.wave.service.HallService;
 import com.h4n_ul.wave.service.ReelService;
@@ -29,7 +31,7 @@ public class SearchController {
     private final ArtistService artistSvc;
 
     @GetMapping("artist")
-    public ResponseEntity<Map<String, Object>> hall(@RequestParam("query") String query, @RequestBody() String filter) {
+    public ResponseEntity<Map<String, Object>> artist(@RequestParam("query") String query, @RequestBody() String filter) {
         List<Artist> searched = artistSvc.search(query, filter);
         Map<String, Object> response = new HashMap<>();
         for (Artist artist : searched) {
@@ -39,6 +41,21 @@ public class SearchController {
 
             response.put(artist.getArtistId(), info);
         }
-        return new ResponseEntity<>(null);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("hall")
+    public ResponseEntity<Map<String, Object>> hall(@RequestParam("query") String query, @RequestBody() String filter) {
+        List<Hall> searched = hallSvc.search(query, filter);
+        Map<String, Object> response = new HashMap<>();
+        for (Hall hall : searched) {
+            List<Object> info = new ArrayList<>();
+            info.add(hall.getTitle());
+            info.add(hall.getDescription());
+            info.add(hall.getPicture());
+
+            response.put(hall.getHallId(), info);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
