@@ -1,6 +1,7 @@
 package com.h4n_ul.wave.service;
 
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -49,5 +50,9 @@ public class ArtistService {
         Boolean match = hanCrypt.confirm(target.get().getUid(), password, target.get().getPasses(), target.get().getPwHash(), target.get().getSalt());
 
         return match;
+    }
+
+    public List<Artist> search(String query, String filter) {
+        return artistRepo.findByArtistNnameContaining(query);
     }
 }

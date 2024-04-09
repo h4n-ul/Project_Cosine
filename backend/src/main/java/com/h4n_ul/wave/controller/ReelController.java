@@ -31,9 +31,9 @@ public class ReelController {
     private final HallService hallSvc;
 
     @PostMapping("create")
-    public ResponseEntity<Map<String, Reel>> createReel(HttpServletRequest request, @ModelAttribute ReelDTO reelDTO) {
+    public ResponseEntity<Map<String, Object>> createReel(HttpServletRequest request, @ModelAttribute ReelDTO reelDTO) {
         HttpSession session = request.getSession(false);
-        Map<String, Reel> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         if (session == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -44,8 +44,15 @@ public class ReelController {
         }
 
         Reel reel = reelSvc.createReel(targetArtist, reelDTO.getTitle(), reelDTO.getContents(), hallSvc.get(reelDTO.getHallId()), reelDTO.getFiles(), reelDTO.getAudioFiles());
-        response.put("reel", reel);
-        System.out.println(reel);
+        response.put("link", "/b/"+reel.getHallId().getHallId()+reel.getReelId());
+        response.put("owner", reel.getOwner());
+        response.put("title", reel.getTitle());
+        response.put("contents", reel.getContents());
+        response.put("masters", reel.getMaster().size());
+        response.put("degausses", reel.getDegausse().size());
+        response.put("audio_files", reel.getAudiofiles());
+        response.put("release_date", reel.getRelease());
+        response.put("files", reel.getFiles());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

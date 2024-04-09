@@ -196,7 +196,7 @@ public class HanCryptUtil {
         byte[][] b = new byte[16][16];
         int v = 0;
         List<Byte> list = new ArrayList<>();
-        
+
         for (int i = 0; i < 256; ++i) {
             list.add((byte)v++);
         }
@@ -223,7 +223,7 @@ public class HanCryptUtil {
     private static byte[][] tableUnzipper(String fa) {
         byte[] fab = Base64.getDecoder().decode(fa);
         byte[][] table = new byte[16][16];
-        
+
         for(int i = 0; i < table.length; i++){
             for(int j = 0; j < table[i].length; j++){
                 table[i][j] = fab[i * 16 + j];

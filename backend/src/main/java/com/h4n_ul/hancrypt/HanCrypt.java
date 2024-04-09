@@ -156,7 +156,7 @@ public class HanCrypt {
             String p = "@hc4@"+passes+"@"+h[2]+"@"+salt+"@"+h[3];
             md5.update(p.getBytes(), 0, p.length());
             byte[] v = new byte[16]; md5.doFinal(v, 0);
-            
+
             if (!h[4].equals(Base64.getEncoder().encodeToString(v))) {
                 throw new IntegrityUnguaranteedException("Password has been corrupted.");
             }
@@ -189,7 +189,7 @@ public class HanCrypt {
             String p = "@hc4@"+passes+"@"+dbHashBase64+"@"+dbSaltBase64+"@"+parts[5];
             md5.update(p.getBytes(), 0, p.length());
             byte[] v = new byte[16]; md5.doFinal(v, 0);
-            
+
             if (!parts[6].equals(Base64.getEncoder().encodeToString(v))) {
                 throw new IntegrityUnguaranteedException("Password has been corrupted.");
             }

@@ -22,6 +22,9 @@ public class Artist {
     private String artistNname;
 
     @Column(length = 1000)
+    private String description;
+
+    @Column(length = 1000)
     private String pwHash;
     @Column(length = 1000)
     private String salt;
