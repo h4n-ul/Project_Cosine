@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.h4n_ul.wave.controller.dto.ReelDTO;
 import com.h4n_ul.wave.entity.Artist;
 import com.h4n_ul.wave.entity.Reel;
+import com.h4n_ul.wave.repository.ArtistRepo;
 import com.h4n_ul.wave.service.HallService;
 import com.h4n_ul.wave.service.ReelService;
 
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 @RequestMapping("/backend/reel")
 public class ReelController {
+    private final ArtistRepo artistRepo;
     private final ReelService reelSvc;
     private final HallService hallSvc;
 
@@ -44,16 +46,8 @@ public class ReelController {
         }
 
         Reel reel = reelSvc.createReel(targetArtist, reelDTO.getTitle(), reelDTO.getContents(), hallSvc.get(reelDTO.getHallId()), reelDTO.getFiles(), reelDTO.getAudioFiles());
-        response.put("link", "/b/"+reel.getHallId().getHallId()+reel.getReelId());
-        response.put("owner", reel.getOwner());
-        response.put("title", reel.getTitle());
-        response.put("contents", reel.getContents());
-        response.put("masters", reel.getMaster().size());
-        response.put("degausses", reel.getDegausse().size());
-        response.put("audio_files", reel.getAudiofiles());
-        response.put("release_date", reel.getRelease());
-        response.put("files", reel.getFiles());
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        response.put("link", reel.getReelId());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
@@ -65,6 +59,8 @@ public class ReelController {
             response.put("message", "Not found");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
+
+        reel.setOwner(artistRepo.findById(reel.getOwner()).get().getArtistNname());
 
         response.put("data", reel);
 

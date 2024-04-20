@@ -59,7 +59,7 @@ const Reel = () => {
       <div className='prose' style={{width: '60%'}}>
         <h1 style={{margin: '10px', fontSize: '1.5rem', fontWeight: '900'}}>{reelInfo.title}</h1>
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-          <p style={{marginLeft: '10px'}}>{reelInfo.owner.artistId}</p>
+          <p style={{marginLeft: '10px'}}>{reelInfo.owner}</p>
           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: '10px'}}>
             <p style={{fontWeight: '200', fontSize: '10px'}}>{reelInfo.link}</p>
           </div>

@@ -38,52 +38,59 @@ public class ReelService {
         SecureRandom random = new SecureRandom();
         byte[] p = new byte[32];
         random.nextBytes(p);
-        String mid = Base64.encodeBase64String(p);
+        String rid = Base64.encodeBase64String(p).replace("/", "_");;
 
-        target.setReelId(mid);
+        target.setReelId(rid);
         target.setTitle(title);
         target.setContents(contents);
-        target.setOwner(artist);
+        target.setOwner(artist.getUid());
 
         List<FileArchive> fileArchiveList = new ArrayList<>();
-        for (MultipartFile file : files) {
-            random.nextBytes(p);
-            String fid = Base64.encodeBase64String(p);
-
-            try {
-                String filepath = saveFile(file);
-                FileArchive fileArchive = new FileArchive();
-                fileArchive.setFileId(mid+"."+fid);
-                fileArchive.setLocation(filepath);
-                fileArchive.setOrigFileName(file.getOriginalFilename());
-                fileArchiveList.add(fileArchive);
-            }
-            catch (IOException e) {
-                e.printStackTrace();
+        if (files != null) {
+            for (MultipartFile file : files) {
+                random.nextBytes(p);
+                String fid = Base64.encodeBase64String(p).replace("/", "_");
+    
+                try {
+                    String filepath = saveFile(file);
+                    FileArchive fileArchive = new FileArchive();
+                    fileArchive.setFileId(rid+"."+fid);
+                    fileArchive.setLocation(filepath);
+                    fileArchive.setOrigFileName(file.getOriginalFilename());
+                    fileArchiveList.add(fileArchive);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         target.setFiles(fileArchiveList);
 
         List<AudioArchs> audioArchiveList = new ArrayList<>();
-        for (AudioFiles file : audioFiles) {
-            random.nextBytes(p);
-            String fid = Base64.encodeBase64String(p);
+        if (audioFiles != null) {
+            for (AudioFiles file : audioFiles) {
+                random.nextBytes(p);
+                String fid = Base64.encodeBase64String(p).replace("/", "_");;
 
-            try {
-                String filepath = saveFile(file.getFile());
-                AudioArchs fileArchive = new AudioArchs();
-                fileArchive.setFileId(mid+"."+fid+".audio");
-                fileArchive.setLocation(filepath);
-                fileArchive.setArtist(file.getArtist());
-                fileArchive.setTitle(file.getTitle());
-                fileArchive.setOrigFileName(file.getFile().getOriginalFilename());
-                audioArchiveList.add(fileArchive);
-            }
-            catch (IOException e) {
-                e.printStackTrace();
+                try {
+                    String filepath = saveFile(file.getFile());
+                    AudioArchs fileArchive = new AudioArchs();
+                    fileArchive.setFileId(rid+"."+fid+".audio");
+                    fileArchive.setLocation(filepath);
+                    fileArchive.setArtist(file.getArtist());
+                    fileArchive.setTitle(file.getTitle());
+                    fileArchive.setOrigFileName(file.getFile().getOriginalFilename());
+                    audioArchiveList.add(fileArchive);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         target.setAudiofiles(audioArchiveList);
+
+        target.setMaster(new ArrayList<>());
+        target.setDegausse(new ArrayList<>());
 
         target.setHallId(hid);
         target.setRelease(LocalDateTime.now());

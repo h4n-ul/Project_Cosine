@@ -40,6 +40,7 @@ public class Hall {
         inverseJoinColumns = @JoinColumn(name = "artist_uid")
     )
     private Set<Artist> subManagers;
+    private Set<String> subscribed_by;
 
     @OneToOne
     @JoinColumn(name = "hall_header_id")

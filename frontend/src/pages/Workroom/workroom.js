@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { Navigate, redirect, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../../services/AuthContext';
 import showMetadataModal from './metamodal';
@@ -15,6 +15,7 @@ const Workroom = () => {
   const [title, setTitle] = useState('');
   const [contents, setContents] = useState('');
   const [files, setFiles] = useState([]);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,6 +59,10 @@ const Workroom = () => {
       },
       withCredentials: true
     });
+    if (response.status === 200) {
+      console.log(response)
+      navigate(`/b/${hall}/${response.data.link}`);
+    }
   };
 
   const handleFileChange = (e) => {

@@ -26,7 +26,7 @@ public class HallService {
         Hall target = new Hall();
 
         random.nextBytes(p);
-        String hid = Base64.encodeBase64String(p);
+        String hid = Base64.encodeBase64String(p).replace("/", "_");;
 
         target.setHallId(hid);
         target.setTitle(hallName);

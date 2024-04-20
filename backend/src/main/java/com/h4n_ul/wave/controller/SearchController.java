@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.h4n_ul.wave.entity.Artist;
 import com.h4n_ul.wave.entity.Hall;
 import com.h4n_ul.wave.service.ArtistService;
+import com.h4n_ul.wave.service.FileService;
 import com.h4n_ul.wave.service.HallService;
 import com.h4n_ul.wave.service.ReelService;
 
@@ -29,6 +30,7 @@ public class SearchController {
     private final HallService hallSvc;
     private final ReelService reelSvc;
     private final ArtistService artistSvc;
+    private final FileService fileSvc;
 
     @GetMapping("artist")
     public ResponseEntity<Map<String, Object>> artist(@RequestParam("query") String query, @RequestBody() String filter) {
@@ -52,7 +54,7 @@ public class SearchController {
             List<Object> info = new ArrayList<>();
             info.add(hall.getTitle());
             info.add(hall.getDescription());
-            info.add(hall.getPicture());
+            info.add(fileSvc.getFile(hall.getPicture().getFileId()));
 
             response.put(hall.getHallId(), info);
         }

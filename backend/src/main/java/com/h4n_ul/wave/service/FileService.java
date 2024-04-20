@@ -1,5 +1,6 @@
 package com.h4n_ul.wave.service;
 
+import java.io.File;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -14,10 +15,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FileService {
     private final FileRepo fileRepo;
-    public FileArchive getFile(String id) {
+    public File getFile(String id) {
         if (id != null) {
             Optional<FileArchive> file = fileRepo.findById(id); 
-            try {return file.get();} catch (Exception e) {return null;}
+            try {
+                File f = new File(file.get().getLocation());
+                return f;
+            } catch (Exception e) {return null;}
         }
         else throw new DataNotFoundException("");
     }
