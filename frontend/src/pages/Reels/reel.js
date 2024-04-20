@@ -17,7 +17,7 @@ const Reel = () => {
         withCredentials: true
       });
       console.log(response);
-      return response.data;
+      return response.data.data;
     } catch (error) {
       console.error('Failed to fetch data:', error);
       return null;
@@ -61,7 +61,7 @@ const Reel = () => {
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
           <p style={{marginLeft: '10px'}}>{reelInfo.owner}</p>
           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: '10px'}}>
-            <p style={{fontWeight: '200', fontSize: '10px'}}>{reelInfo.link}</p>
+            <p style={{fontWeight: '200', fontSize: '10px'}}>/b/{reelInfo.hallId.src}/{reelInfo.reelId}</p>
           </div>
         </div>
         <div dangerouslySetInnerHTML={{__html: reelInfo.contents}}/>

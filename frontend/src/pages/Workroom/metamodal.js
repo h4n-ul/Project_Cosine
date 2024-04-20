@@ -3,10 +3,27 @@ import ReactDOM from 'react-dom';
 
 const MetadataModal = ({ file, onSubmit, onClose }) => {
   const [title, setTitle] = useState('');
-  const [artist, setArtist] = useState('');
+  const [artists, setArtists] = useState([]);
+  const [isOriginal, setIsOriginal] = useState(false);
 
   const handleSubmit = () => {
-    onSubmit({ title, artist });
+    onSubmit({ title, artists, isOriginal });
+  };
+
+  const handleArtistChange = (e, index) => {
+    const newArtists = [...artists];
+    newArtists[index] = e.target.value;
+    setArtists(newArtists);
+  };
+
+  const addArtist = () => {
+    setArtists([...artists, '']);
+  };
+
+  const removeArtist = (index) => {
+    const newArtists = [...artists];
+    newArtists.splice(index, 1);
+    setArtists(newArtists);
   };
 
   return ReactDOM.createPortal(
@@ -30,15 +47,36 @@ const MetadataModal = ({ file, onSubmit, onClose }) => {
         </div>
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Artist</span>
+            <span className="label-text">Artists</span>
           </label>
-          <input
-            type="text"
-            placeholder="Enter artist"
-            className="input input-bordered"
-            value={artist}
-            onChange={(e) => setArtist(e.target.value)}
-          />
+          {artists.map((artist, index) => (
+            <div key={index} className="flex items-center mb-2">
+              <input
+                type="text"
+                placeholder="Enter artist"
+                className="input input-bordered mr-2"
+                value={artist}
+                onChange={(e) => handleArtistChange(e, index)}
+              />
+              <button className="btn btn-sm btn-circle btn-ghost" onClick={() => removeArtist(index)}>
+                ✕
+              </button>
+            </div>
+          ))}
+          <button className="btn btn-sm btn-neutral" onClick={addArtist}>
+            Add Artist
+          </button>
+        </div>
+        <div className="form-control">
+          <label className="label cursor-pointer">
+            <span className="label-text">Original</span>
+            <input
+              type="checkbox"
+              className="checkbox"
+              checked={isOriginal}
+              onChange={(e) => setIsOriginal(e.target.checked)}
+            />
+          </label>
         </div>
         <div className="modal-action">
           <button className="btn btn-neutral" onClick={handleSubmit}>
