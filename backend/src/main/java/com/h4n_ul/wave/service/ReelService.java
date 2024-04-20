@@ -32,7 +32,7 @@ public class ReelService {
     private final ReelRepo reelRepo;
 
     @Transactional
-    public Reel createReel(@NonNull Artist artist, String title, String contents, Hall hid, List<MultipartFile> files, List<AudioFiles> audioFiles) {
+    public Reel createReel(@NonNull Artist artist, String title, String contents, Hall hall, List<MultipartFile> files, List<AudioFiles> audioFiles) {
         Reel target = new Reel();
 
         SecureRandom random = new SecureRandom();
@@ -92,7 +92,7 @@ public class ReelService {
         target.setMaster(new ArrayList<>());
         target.setDegausse(new ArrayList<>());
 
-        target.setHallId(hid);
+        target.setHallId(hall.getHallId());
         target.setRelease(LocalDateTime.now());
         target.setLastRework(LocalDateTime.now());
 
@@ -112,7 +112,7 @@ public class ReelService {
         return reellist;
     }
 
-    public Reel getById(@NonNull String mid) {
+    public Reel getReel(@NonNull String mid) {
         Optional<Reel> reel = reelRepo.findById(mid);
         if (reel.isPresent()) return reel.get();
         return null;

@@ -43,6 +43,14 @@ public class ArtistService {
         return target;
     }
 
+    public Artist getArtist(String artistId) {
+        Optional<Artist> artopt = artistRepo.findByArtistId(artistId);
+        if (!artopt.isPresent()) {
+            return null;
+        }
+        return artopt.get();
+    }
+
     public Boolean login(String artistId, String password) {
         HanCrypt hanCrypt = new HanCrypt();
         Optional<Artist> target = artistRepo.findByArtistId(artistId);

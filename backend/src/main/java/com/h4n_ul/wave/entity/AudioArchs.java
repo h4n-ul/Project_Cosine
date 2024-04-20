@@ -2,6 +2,8 @@ package com.h4n_ul.wave.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -18,7 +20,8 @@ public class AudioArchs {
 
     private String origFileName;
     private String location;
+    private Boolean isOriginal;
 
     private String title;
-    private String artist;
+    private List<String> artist;
 }

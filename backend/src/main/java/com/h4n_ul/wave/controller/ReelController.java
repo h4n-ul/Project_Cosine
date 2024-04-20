@@ -45,7 +45,7 @@ public class ReelController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        Reel reel = reelSvc.createReel(targetArtist, reelDTO.getTitle(), reelDTO.getContents(), hallSvc.get(reelDTO.getHallId()), reelDTO.getFiles(), reelDTO.getAudioFiles());
+        Reel reel = reelSvc.createReel(targetArtist, reelDTO.getTitle(), reelDTO.getContents(), hallSvc.getHall(reelDTO.getHallId()), reelDTO.getFiles(), reelDTO.getAudioFiles());
         response.put("link", reel.getReelId());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -53,7 +53,7 @@ public class ReelController {
     @GetMapping("{id}")
     public ResponseEntity<Map<String, Object>> getReel(@PathVariable("id") String id) {
         System.out.println(id);
-        Reel reel = reelSvc.getById(id);
+        Reel reel = reelSvc.getReel(id);
         Map<String, Object> response = new HashMap<>();
         if (reel == null) {
             response.put("message", "Not found");

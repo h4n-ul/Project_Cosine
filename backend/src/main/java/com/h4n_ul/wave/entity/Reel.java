@@ -9,7 +9,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,8 +21,7 @@ public class Reel {
     @Id @Column(length = 1000)
     private String reelId;
 
-    @ManyToOne
-    private Hall hallId;
+    private String hallId;
 
     private String title;
     private String contents;

@@ -22,6 +22,7 @@ public class ReelDTO {
     static class AudioFiles {
         private MultipartFile file;
         private String title;
-        private String artist;
+        private List<String> artist;
+        private Boolean isOriginal;
     }
 }

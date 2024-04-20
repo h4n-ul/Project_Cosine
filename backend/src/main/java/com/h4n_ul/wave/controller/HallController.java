@@ -62,7 +62,7 @@ public class HallController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
-        if (hallService.get(createHallDTO.getSrc()) != null) {
+        if (hallService.getHall(createHallDTO.getSrc()) != null) {
             response.put("message", "Link already exists");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
@@ -74,7 +74,7 @@ public class HallController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getHall(@PathVariable("id") String id) {
-        Hall h = hallService.get(id);
+        Hall h = hallService.getHall(id);
         Map<String, Object> response = new HashMap<>();
         if (h == null) {
             response.put("message", "Not found");
@@ -85,8 +85,8 @@ public class HallController {
         response.put("title", h.getTitle());
         response.put("description", h.getDescription());
         response.put("src", h.getSrc());
-        response.put("managerId", h.getManager().getUid());
-        response.put("managerName", h.getManager().getArtistId());
+        response.put("managerId", h.getManager());
+        response.put("managerName", artistSvc.getArtist(h.getManager()));
 
         List<Reel> reelList = reelService.getAllByHall(h);
         response.put("reels", reelList);
