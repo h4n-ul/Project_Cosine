@@ -16,6 +16,9 @@ import org.springframework.stereotype.Controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.h4n_ul.wave.entity.AudioArchs;
+import com.h4n_ul.wave.repository.AudiRepo;
+
 // import com.h4n_ul.wave.service.FileService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,12 +30,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequiredArgsConstructor
 @RequestMapping("backend/stream")
 public class Player {
+    private final AudiRepo audiRepo;
     // private final FileService fileService;
     private final Tika tika = new Tika();
 
     @GetMapping("/{id}")
     public ResponseEntity<ByteArrayResource> stream(@PathVariable String id, HttpServletRequest request) throws Exception {
-        File file = new File("/Users/H4n_uL/Desktop/Storages/Music/블루 아카이브/Digital/대한민국_글로벌 PV 「Target for Love」/(KR)Blue Archive_Target for love_2nd final.mp3");
+        AudioArchs audio = audiRepo.findById(id).orElse(null);
+        File file = new File(audio.getLocation());
         Path path = Paths.get(file.getAbsolutePath());
         ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
         String range = request.getHeader(HttpHeaders.RANGE);

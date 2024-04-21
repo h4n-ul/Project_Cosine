@@ -3,7 +3,7 @@ import '../main.css'
 import axios from 'axios';
 import videojs from 'video.js';
 
-function AudioPlayer({streamId}) {
+function AudioPlayer({streamId, title, artist}) {
     const audioRef = useRef(null);
     const [player, setPlayer] = useState(null);
     const [playing, setPlaying] = useState(false);
@@ -68,13 +68,16 @@ function AudioPlayer({streamId}) {
     }
 
     return (
-        <div style={{display: 'flex', alignItems: 'center', margin: '10px'}}>
+        <div style={{margin: '10px'}}>
             <div data-vjs-player>
                 <audio ref={audioRef} className="video-js"></audio>
             </div>
-            <button className='btn' onClick={togglePlay}>{playing ? 'Pause' : 'Play'}</button>
-            <input type="range" min={0} max="1" step="any" className="range range-sm w-80" value={progress} onChange={handleSliderChange} 
-            style={{marginLeft: '10px'}}/>
+            <p style={{fontWeight: '400', fontSize: '12px', marginBottom: '10px'}}>{title} - {artist}</p>
+            <div style={{display: 'flex', alignItems: 'center'}}>
+                <button className='btn' onClick={togglePlay}>{playing ? 'Pause' : 'Play'}</button>
+                <input type="range" min={0} max="1" step="any" className="range range-sm w-80" value={progress} onChange={handleSliderChange} 
+                style={{marginLeft: '10px'}}/>
+            </div>
         </div>
     );
 }

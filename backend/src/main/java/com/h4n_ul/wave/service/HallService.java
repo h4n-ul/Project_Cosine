@@ -2,7 +2,6 @@ package com.h4n_ul.wave.service;
 
 import java.security.SecureRandom;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
@@ -37,11 +36,11 @@ public class HallService {
     }
 
     public Hall getHall(String src) {
-        Optional<Hall> hallOpt = hRepo.findBySrc(src);
-        if (!hallOpt.isPresent()) {
-            return null;
-        }
-        return hallOpt.get();
+        return hRepo.findBySrc(src).orElse(null);
+    }
+
+    public Hall getHallById(String id) {
+        return hRepo.findById(id).orElse(null);
     }
 
     public List<Hall> search(String query, String filter) {

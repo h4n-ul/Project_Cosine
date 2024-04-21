@@ -32,4 +32,6 @@ public class Hall {
     @OneToOne
     @JoinColumn(name = "hall_header_id")
     private FileArchive picture;
+
+    private Integer popularity;
 }

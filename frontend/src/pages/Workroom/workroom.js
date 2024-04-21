@@ -17,6 +17,10 @@ const Workroom = () => {
   const [files, setFiles] = useState([]);
   const navigate = useNavigate();
 
+  if (!isLoggedIn) {
+    return <Navigate to={`/b/${hall}`} />;
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -53,7 +57,7 @@ const Workroom = () => {
       formData.append(`files[${index}]`, file, file.name);
     });
   
-    const response = await axios.post('http://localhost:8080/backend/reel/create', formData, {
+    const response = await axios.post('http://localhost:8080/backend/reel/record', formData, {
       header: {
         'Content-Type': 'multipart/form-data'
       },

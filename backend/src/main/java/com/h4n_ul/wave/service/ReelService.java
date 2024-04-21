@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,8 @@ import com.h4n_ul.wave.entity.AudioArchs;
 import com.h4n_ul.wave.entity.FileArchive;
 import com.h4n_ul.wave.entity.Hall;
 import com.h4n_ul.wave.entity.Reel;
+import com.h4n_ul.wave.repository.AudiRepo;
+import com.h4n_ul.wave.repository.FileRepo;
 import com.h4n_ul.wave.repository.ReelRepo;
 
 import lombok.NonNull;
@@ -30,9 +33,11 @@ import lombok.RequiredArgsConstructor;
 public class ReelService {
     private static final String FILE_PATH = "/Users/H4n_uL/Database/";
     private final ReelRepo reelRepo;
+    private final FileRepo fileRepo;
+    private final AudiRepo audiRepo;
 
     @Transactional
-    public Reel createReel(@NonNull Artist artist, String title, String contents, Hall hall, List<MultipartFile> files, List<AudioFiles> audioFiles) {
+    public Reel record(@NonNull Artist artist, String title, String contents, Hall hall, List<MultipartFile> files, List<AudioFiles> audioFiles) {
         Reel target = new Reel();
 
         SecureRandom random = new SecureRandom();
@@ -43,7 +48,7 @@ public class ReelService {
         target.setReelId(rid);
         target.setTitle(title);
         target.setContents(contents);
-        target.setOwner(artist.getUid());
+        target.setArtistId(artist.getUid());
 
         List<FileArchive> fileArchiveList = new ArrayList<>();
         if (files != null) {
@@ -52,11 +57,13 @@ public class ReelService {
                 String fid = Base64.encodeBase64String(p).replace("/", "_");
     
                 try {
-                    String filepath = saveFile(file);
+                    fid = rid+"."+fid;
+                    String filepath = saveFile(file, fid);
                     FileArchive fileArchive = new FileArchive();
-                    fileArchive.setFileId(rid+"."+fid);
+                    fileArchive.setFileId(fid);
                     fileArchive.setLocation(filepath);
                     fileArchive.setOrigFileName(file.getOriginalFilename());
+                    fileRepo.save(fileArchive);
                     fileArchiveList.add(fileArchive);
                 }
                 catch (IOException e) {
@@ -67,20 +74,24 @@ public class ReelService {
         target.setFiles(fileArchiveList);
 
         List<AudioArchs> audioArchiveList = new ArrayList<>();
+        System.out.println(audioFiles);
         if (audioFiles != null) {
             for (AudioFiles file : audioFiles) {
                 random.nextBytes(p);
                 String fid = Base64.encodeBase64String(p).replace("/", "_");;
 
                 try {
-                    String filepath = saveFile(file.getFile());
-                    AudioArchs fileArchive = new AudioArchs();
-                    fileArchive.setFileId(rid+"."+fid+".audio");
-                    fileArchive.setLocation(filepath);
-                    fileArchive.setArtist(file.getArtist());
-                    fileArchive.setTitle(file.getTitle());
-                    fileArchive.setOrigFileName(file.getFile().getOriginalFilename());
-                    audioArchiveList.add(fileArchive);
+                    fid = rid+"."+fid+".audio";
+                    String filepath = saveFile(file.getFile(), fid);
+                    AudioArchs audioArch = new AudioArchs();
+                    audioArch.setFileId(fid);
+                    audioArch.setLocation(filepath);
+                    audioArch.setArtist(file.getArtist());
+                    audioArch.setTitle(file.getTitle());
+                    audioArch.setOrigFileName(file.getFile().getOriginalFilename());
+                    audioArch.setIsOriginal(file.getIsOriginal());
+                    audiRepo.save(audioArch);
+                    audioArchiveList.add(audioArch);
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -89,25 +100,26 @@ public class ReelService {
         }
         target.setAudiofiles(audioArchiveList);
 
-        target.setMaster(new ArrayList<>());
-        target.setDegausse(new ArrayList<>());
+        target.setMaster(new HashSet<>());
+        target.setDegausse(new HashSet<>());
 
         target.setHallId(hall.getHallId());
-        target.setRelease(LocalDateTime.now());
-        target.setLastRework(LocalDateTime.now());
+        LocalDateTime now = LocalDateTime.now();
+        target.setRelease(now);
+        target.setLastRework(now);
 
         reelRepo.save(target);
         return target;
     }
 
-    private String saveFile(MultipartFile file) throws IOException {
-        String filename = file.getOriginalFilename();
+    private String saveFile(MultipartFile file, String fid) throws IOException {
+        String filename = fid;
         String filepath = Paths.get(FILE_PATH, filename).toString();
         file.transferTo(new File(filepath));
         return filepath;
     }
 
-    public List<Reel> getAllByHall(@NonNull Hall hallId) {
+    public List<Reel> getAllByHall(String hallId) {
         List<Reel> reellist = reelRepo.findByHallId(hallId);
         return reellist;
     }

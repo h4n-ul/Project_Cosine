@@ -14,7 +14,7 @@ public class ReelDTO {
     private String contents;
     private String hallId;
     private List<MultipartFile> files;
-    private List<AudioFiles> audioFiles;
+    private List<AudioFiles> audio;
 
     @Getter
     @Setter

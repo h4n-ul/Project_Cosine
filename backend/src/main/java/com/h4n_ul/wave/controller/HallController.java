@@ -86,9 +86,9 @@ public class HallController {
         response.put("description", h.getDescription());
         response.put("src", h.getSrc());
         response.put("managerId", h.getManager());
-        response.put("managerName", artistSvc.getArtist(h.getManager()));
+        response.put("managerName", artistSvc.getArtistByUid(h.getManager()).getArtistId());
 
-        List<Reel> reelList = reelService.getAllByHall(h);
+        List<Reel> reelList = reelService.getAllByHall(h.getHallId());
         response.put("reels", reelList);
 
         return new ResponseEntity<>(response, HttpStatus.OK);

@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from '../components/Header';
 import Studio from './Studio/studio';
 import NotFound from './NotFound/404';
-import LoginPage from './Artist/login';
+import Profile from './Artist/profile';
 import Reel from './Reels/reel';
 import Hall from './Hall/hall';
 import Workroom from './Workroom/workroom';
@@ -29,13 +29,13 @@ const MainContents = () => {
       <Routes>
         <Route path="/workroom/:hall" element={<Workroom />}></Route>
         <Route path="/" element={<Studio />}></Route>
-        <Route path="/login" element={<LoginPage />}></Route>
+        <Route path="/profile/:uid" element={<Profile />}></Route>
         <Route path="/b/:hall" element={<Hall />}></Route>
         <Route path="/b/:hall/:reel" element={<Reel />}></Route>
         <Route path="/*" element={<NotFound />}></Route>
       </Routes>
-      {data.streamId != '' ? 
-      <footer style={{position: 'fixed', bottom: '0'}}><AudioPlayer streamId={data.streamId} /></footer> : <></>}
+      {data.streamId != null ? 
+      <footer style={{position: 'fixed', bottom: '0', alignSelf: 'center'}}><AudioPlayer streamId={data.streamId} title={data.title} artist={data.artist} /></footer> : <></>}
     </BrowserRouter>
   );
 };

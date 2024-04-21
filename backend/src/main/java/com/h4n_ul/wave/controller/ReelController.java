@@ -1,5 +1,7 @@
 package com.h4n_ul.wave.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.h4n_ul.wave.controller.dto.ReelDTO;
 import com.h4n_ul.wave.entity.Artist;
+import com.h4n_ul.wave.entity.AudioArchs;
+import com.h4n_ul.wave.entity.FileArchive;
 import com.h4n_ul.wave.entity.Reel;
 import com.h4n_ul.wave.repository.ArtistRepo;
 import com.h4n_ul.wave.service.HallService;
@@ -32,8 +36,8 @@ public class ReelController {
     private final ReelService reelSvc;
     private final HallService hallSvc;
 
-    @PostMapping("create")
-    public ResponseEntity<Map<String, Object>> createReel(HttpServletRequest request, @ModelAttribute ReelDTO reelDTO) {
+    @PostMapping("record")
+    public ResponseEntity<Map<String, Object>> record(HttpServletRequest request, @ModelAttribute ReelDTO reelDTO) {
         HttpSession session = request.getSession(false);
         Map<String, Object> response = new HashMap<>();
         if (session == null) {
@@ -45,14 +49,13 @@ public class ReelController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        Reel reel = reelSvc.createReel(targetArtist, reelDTO.getTitle(), reelDTO.getContents(), hallSvc.getHall(reelDTO.getHallId()), reelDTO.getFiles(), reelDTO.getAudioFiles());
+        Reel reel = reelSvc.record(targetArtist, reelDTO.getTitle(), reelDTO.getContents(), hallSvc.getHall(reelDTO.getHallId()), reelDTO.getFiles(), reelDTO.getAudio());
         response.put("link", reel.getReelId());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Map<String, Object>> getReel(@PathVariable("id") String id) {
-        System.out.println(id);
         Reel reel = reelSvc.getReel(id);
         Map<String, Object> response = new HashMap<>();
         if (reel == null) {
@@ -60,15 +63,61 @@ public class ReelController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        reel.setOwner(artistRepo.findById(reel.getOwner()).get().getArtistNname());
+        reel.setArtistId(artistRepo.findById(reel.getArtistId()).get().getArtistNname());
 
-        response.put("data", reel);
+        response.put("title", reel.getTitle());
+        response.put("contents", reel.getContents());
+        response.put("owner", reel.getArtistId());
+        response.put("reelId", reel.getReelId());
+        response.put("release", reel.getRelease());
+        response.put("lastRework", reel.getLastRework());
+        response.put("master", reel.getMaster());
+        response.put("degausse", reel.getDegausse());
+        response.put("hallId", hallSvc.getHallById(reel.getHallId()).getSrc());
+
+        if (reel.getFiles() != null) {
+            Map<String, Object> file = new HashMap<>();
+            List<Map<String, Object>> files = new ArrayList<>();
+            List<FileArchive> farch = reel.getFiles();
+            for (FileArchive f : farch) {
+                file.put("fileId", f.getFileId());
+                file.put("originalFileName", f.getOrigFileName());
+                files.add(file);
+            }
+            response.put("files", files);
+        }
+
+        if (reel.getAudiofiles() != null) {
+            Map<String, Object> audio = new HashMap<>();
+            List<Map<String, Object>> audios = new ArrayList<>();
+            List<AudioArchs> aarch = reel.getAudiofiles();
+            for (AudioArchs a : aarch) {
+                audio.put("fileId", a.getFileId());
+                audio.put("title", a.getTitle());
+                audio.put("artist", a.getArtist());
+                audio.put("isOriginal", a.getIsOriginal());
+                audios.add(audio);
+            }
+            response.put("audio", audios);
+        }
+
+        // response.put("data", reel);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("rework")
-    public Reel rework(HttpServletRequest request, String id, String title, String contents) {
+    public Reel rework(HttpServletRequest request, @ModelAttribute ReelDTO reelDTO) {
+        // HttpSession session = request.getSession();
+        // System.out.println(session.getId());
+        // String loggedInArtist = (String) session.getAttribute("loggedInArtist");
+        // System.out.println(loggedInArtist);
+        // reelSvc.createReel(loggedInArtist, title, contents, null);
+        return null;
+    }
+
+    @PostMapping("incinerate")
+    public Reel incinerate(HttpServletRequest request, String id) {
         // HttpSession session = request.getSession();
         // System.out.println(session.getId());
         // String loggedInArtist = (String) session.getAttribute("loggedInArtist");

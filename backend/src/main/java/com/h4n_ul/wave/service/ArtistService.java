@@ -43,12 +43,12 @@ public class ArtistService {
         return target;
     }
 
-    public Artist getArtist(String artistId) {
-        Optional<Artist> artopt = artistRepo.findByArtistId(artistId);
-        if (!artopt.isPresent()) {
-            return null;
-        }
-        return artopt.get();
+    public Artist getArtistByUid(String uid) {
+        return artistRepo.findById(uid).orElse(null);
+    }
+
+    public Artist getArtistByPubId(String artistId) {
+        return artistRepo.findByArtistId(artistId).orElse(null);
     }
 
     public Boolean login(String artistId, String password) {

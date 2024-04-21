@@ -4,14 +4,14 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import AudioCard from '../../components/AudioCard';
 
-const Reel = () => {
-  const { hall, reel } = useParams()
+const Profile = () => {
+  const { uid } = useParams()
 
-  const [reelInfo, setReel] = useState(null);
+  const [profile, setProfile] = useState(null);
 
-  const getReel = async () => {
+  const getProfile = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/backend/reel/${reel}`, {
+      const response = await axios.get(`http://localhost:8080/backend/artist/${uid}`, {
         withCredentials: true
       });
       console.log(response);
@@ -24,8 +24,8 @@ const Reel = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await getReel();
-      setReel(result);
+      const result = await getProfile();
+      setProfile(result);
     };
     fetchData();
   }, [reel]);
@@ -78,4 +78,4 @@ const Reel = () => {
   )
 }
 
-export default Reel;
+export default Profile;
