@@ -32,6 +32,8 @@ public class Hall {
     @OneToOne
     @JoinColumn(name = "hall_header_id")
     private FileArchive picture;
+    
+    private Set<String> popularityBuffer; // 30분 단위 버퍼
 
     private Integer popularity;
 }

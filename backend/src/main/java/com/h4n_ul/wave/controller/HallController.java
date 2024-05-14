@@ -25,8 +25,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-
-
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/backend/hall")
@@ -44,7 +42,7 @@ public class HallController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        Artist targetArtist = (Artist) session.getAttribute("loggedInArtist");
+        Artist targetArtist = artistSvc.getArtistByUid((String)session.getAttribute("loginArtistUid"));
         if (targetArtist == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }

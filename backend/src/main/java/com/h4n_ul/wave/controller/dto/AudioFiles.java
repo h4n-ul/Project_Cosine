@@ -9,10 +9,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ReelDTO {
+public class AudioFiles {
+    private MultipartFile file;
     private String title;
-    private String contents;
-    private String hallId;
-    private List<MultipartFile> files;
-    private List<AudioFiles> audio;
+    private List<String> artist;
+    private Boolean isOriginal;
 }

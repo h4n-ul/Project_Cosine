@@ -5,25 +5,24 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [artistId, setArtistId] = useState();
   
     useEffect(() => {
       const checkLoginStatus = async () => {
         try {
-          const response = await axios.get('http://localhost:8080/backend/artists/getLoginInfo', {
+          const response = await axios.get('http://localhost:8080/backend/artist/getLoginInfo', {
             withCredentials: true
           });
-          const sessionId = response.data.sessionId;
-          setIsLoggedIn(sessionId !== '');
-        } catch (error) {
-          console.error('Failed to check login status:', error);
-        }
+          setIsLoggedIn(response.data.sessionId !== '');
+          setArtistId(response.data.artistId);
+        } catch (error) {}
       };
   
       checkLoginStatus();
     }, []);
   
     return (
-      <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+      <AuthContext.Provider value={{ isLoggedIn, artistId, setIsLoggedIn, setArtistId }}>
         {children}
       </AuthContext.Provider>
     );

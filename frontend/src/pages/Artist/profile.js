@@ -3,9 +3,12 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import AudioCard from '../../components/AudioCard';
+import { AuthContext } from '../../services/AuthContext';
 
 const Profile = () => {
   const { uid } = useParams()
+  const auth = useContext(AuthContext);
+  console.log(auth.artistId, auth.isLoggedIn);
 
   const [profile, setProfile] = useState(null);
 
@@ -28,9 +31,9 @@ const Profile = () => {
       setProfile(result);
     };
     fetchData();
-  }, [reel]);
+  }, []);
 
-  if (!reelInfo) {
+  if (!profile) {
     return (
       <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
         <div className='prose' style={{width: '60%'}}>
@@ -49,14 +52,14 @@ const Profile = () => {
   return (
     <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
       <div className='prose' style={{width: '60%'}}>
-        <h1 style={{margin: '10px', fontSize: '1.5rem', fontWeight: '900'}}>{reelInfo.title}</h1>
+        <h1 style={{margin: '10px', fontSize: '1.5rem', fontWeight: '900'}}>{profile.artistNname}</h1>
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-          <p style={{marginLeft: '10px'}}>{reelInfo.owner}</p>
+          <p style={{marginLeft: '10px'}}>{profile.description}</p>
           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: '10px'}}>
-            <p style={{fontWeight: '200', fontSize: '10px'}}>/b/{reelInfo.hallId}/{reelInfo.reelId}</p>
+            <p style={{fontWeight: '200', fontSize: '10px'}}>/u/{profile.artistId}</p>
           </div>
         </div>
-        {reelInfo.audio.length > 0 ? (
+        {/* {reelInfo.audio.length > 0 ? (
           <>
             <div className="carousel w-full rounded-box">
               {reelInfo.audio.map((audi, i) => (
@@ -72,7 +75,8 @@ const Profile = () => {
             </div>
           </>
         ) : null}
-        <div dangerouslySetInnerHTML={{__html: reelInfo.contents}}/>
+        <div dangerouslySetInnerHTML={{__html: reelInfo.contents}}/> */}
+        {auth.artistId === profile.artistId ? <Link className="btn" to={`/u/${profile.artistId}/edit`}>Edit Profile</Link> : null}
       </div>
     </div>
   )

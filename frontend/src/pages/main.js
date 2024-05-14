@@ -10,6 +10,7 @@ import Hall from './Hall/hall';
 import Workroom from './Workroom/workroom';
 import { StreamProvider, StreamContext } from '../services/StreamContext';
 import AudioPlayer from './Player';
+import { AuthContext } from '../services/AuthContext';
 
 const Main = () => {
   return (
@@ -27,10 +28,11 @@ const MainContents = () => {
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path="/workroom/:hall" element={<Workroom />}></Route>
         <Route path="/" element={<Studio />}></Route>
-        <Route path="/profile/:uid" element={<Profile />}></Route>
+        <Route path="/u/:uid" element={<Profile />}></Route>
         <Route path="/b/:hall" element={<Hall />}></Route>
+        <Route path="/workroom/:hall" element={<Workroom />}></Route>
+        <Route path="/workroom/:hall/:reel" element={<Workroom />}></Route>
         <Route path="/b/:hall/:reel" element={<Reel />}></Route>
         <Route path="/*" element={<NotFound />}></Route>
       </Routes>

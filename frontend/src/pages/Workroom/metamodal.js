@@ -21,9 +21,7 @@ const MetadataModal = ({ file, onSubmit, onClose }) => {
   };
 
   const removeArtist = (index) => {
-    const newArtists = [...artists];
-    newArtists.splice(index, 1);
-    setArtists(newArtists);
+    setArtists([...artists].splice(index, 1));
   };
 
   return ReactDOM.createPortal(

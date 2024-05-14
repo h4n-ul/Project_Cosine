@@ -3,9 +3,11 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import AudioCard from '../../components/AudioCard';
+import { AuthContext } from '../../services/AuthContext';
 
 const Reel = () => {
   const { hall, reel } = useParams()
+  const auth = useContext(AuthContext);
 
   const [reelInfo, setReel] = useState(null);
 
@@ -72,6 +74,7 @@ const Reel = () => {
             </div>
           </>
         ) : null}
+        {reelInfo.owner === auth.artistId ? <><Link className='btn' style={{margin: '5px'}} to={`/workroom/${hall}/${reel}`}>Rework</Link><Link className='btn btn-error' style={{margin: '5px'}}>Incinerate</Link></> : null}
         <div dangerouslySetInnerHTML={{__html: reelInfo.contents}}/>
       </div>
     </div>

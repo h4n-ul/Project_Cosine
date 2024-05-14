@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/backend/artists")
+@RequestMapping("/backend/artist")
 public class ArtistController {
     public final ArtistService artistSvc;
     public final ArtistRepo artistRepo;
@@ -35,10 +35,9 @@ public class ArtistController {
     public ResponseEntity<Map<String, String>> regist(@RequestBody RegistDTO registDTO, HttpSession session) {
         Artist target = artistSvc.regist(registDTO.getArtistId(), registDTO.getPassword(), registDTO.getEmail());
 
-        session.setAttribute("loggedInArtist", target);
+        session.setAttribute("loginArtistUid", target.getUid());
         Map<String, String> response = new HashMap<>();
         response.put("sessionId", session.getId());
-        response.put("loggedInArtist", target.getUid());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -66,7 +65,7 @@ public class ArtistController {
         }
 
         // 로그인 성공 처리
-        session.setAttribute("loggedInArtist", target);
+        session.setAttribute("loginArtistUid", target.getUid());
         response.put("message", "Login successful");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -89,11 +88,11 @@ public class ArtistController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        Artist loggedInArtist = (Artist) session.getAttribute("loggedInArtist");
-        if (loggedInArtist == null) {
+        Artist loginArtistUid = artistSvc.getArtistByUid((String) session.getAttribute("loginArtistUid"));
+        if (loginArtistUid == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<>(loggedInArtist, HttpStatus.OK);
+        return new ResponseEntity<>(loginArtistUid, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

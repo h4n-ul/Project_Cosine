@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Navigate, redirect, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../../services/AuthContext';
@@ -10,16 +10,34 @@ import 'react-quill/dist/quill.snow.css';
 // Quill.register('modules/imageResize', ImageResize)
 
 const Workroom = () => {
-  const { hall } = useParams()
+  const { hall, reel } = useParams()
   const { isLoggedIn } = useContext(AuthContext);
   const [title, setTitle] = useState('');
   const [contents, setContents] = useState('');
   const [files, setFiles] = useState([]);
   const navigate = useNavigate();
 
-  if (!isLoggedIn) {
-    return <Navigate to={`/b/${hall}`} />;
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      if (reel) {
+        try {
+          const response = await axios.get(`http://localhost:8080/backend/reel/${reel}`, {
+            withCredentials: true
+          });
+          console.log(response);
+          setTitle(response.data.title);
+          setContents(response.data.contents);
+          setFiles(response.data.files);
+        } catch (error) {
+          console.error('Failed to fetch data:', error);
+        }
+      }
+      if (!isLoggedIn) {
+        return <Navigate to={`/b/${hall}`} />;
+      }
+    };
+    fetchData();
+  }, [reel]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,24 +66,39 @@ const Workroom = () => {
     };
   
     afiles.forEach((item, index) => {
+      console.log(item.metadata.artists)
       formData.append(`audio[${index}].file`, item.file);
       formData.append(`audio[${index}].title`, item.metadata.title);
-      formData.append(`audio[${index}].artist`, item.metadata.artist);
+      formData.append(`audio[${index}].artist`, item.metadata.artists);
     });
   
     nonaudio.forEach((file, index) => {
       formData.append(`files[${index}]`, file, file.name);
     });
   
-    const response = await axios.post('http://localhost:8080/backend/reel/record', formData, {
-      header: {
-        'Content-Type': 'multipart/form-data'
-      },
-      withCredentials: true
-    });
-    if (response.status === 200) {
-      console.log(response)
-      navigate(`/b/${hall}/${response.data.link}`);
+    if (reel) {
+      const response = await axios.put(`http://localhost:8080/backend/reel/rework/${reel}`, formData, {
+        header: {
+          'Content-Type': 'multipart/form-data'
+        },
+        withCredentials: true
+      });
+      if (response.status === 200) {
+        console.log(response)
+        navigate(`/b/${hall}/${response.data.link}`);
+      }
+    }
+    else {
+      const response = await axios.post('http://localhost:8080/backend/reel/record', formData, {
+        header: {
+          'Content-Type': 'multipart/form-data'
+        },
+        withCredentials: true
+      });
+      if (response.status === 200) {
+        console.log(response)
+        navigate(`/b/${hall}/${response.data.link}`);
+      }
     }
   };
 

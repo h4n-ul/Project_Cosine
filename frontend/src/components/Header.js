@@ -6,16 +6,17 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../services/AuthContext'
 
 const Header = () => {
-  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+  const auth = useContext(AuthContext);
+  console.log(auth.artistId, auth.isLoggedIn);
 
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:8080/backend/artists/logout",
+        "http://localhost:8080/backend/artist/logout",
         {},
         { withCredentials: true }
       );
-      setIsLoggedIn(false)
+      auth.setIsLoggedIn(false)
       window.location.reload();
     } catch (error) {
       console.error("Logout failed:", error.response.data.message);
@@ -46,8 +47,8 @@ const Header = () => {
           </form>
         </div>
       </div>
-      {isLoggedIn
-      ?<><Link to="/profile" style={{margin: '20px'}}>Profile</Link><button className='btn' style={{margin: '20px'}} onClick={handleLogout}>Logout</button><NewHall/></>
+      {auth.isLoggedIn
+      ?<><Link to={`/u/${auth.artistId}`} style={{margin: '20px'}}>Profile</Link><button className='btn' style={{margin: '20px'}} onClick={handleLogout}>Logout</button><NewHall/></>
       :<Modal/>
       }
     </header>
