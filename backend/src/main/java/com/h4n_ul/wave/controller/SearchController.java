@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.h4n_ul.wave.entity.Artist;
 import com.h4n_ul.wave.entity.Hall;
+import com.h4n_ul.wave.entity.Reel;
 import com.h4n_ul.wave.service.ArtistService;
 import com.h4n_ul.wave.service.FileService;
 import com.h4n_ul.wave.service.HallService;
@@ -57,6 +58,20 @@ public class SearchController {
             info.add(fileSvc.getFile(hall.getPicture().getFileId()));
 
             response.put(hall.getHallId(), info);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("reel")
+    public ResponseEntity<Map<String, Object>> reel(@RequestParam("query") String query, @RequestBody() String filter) {
+        List<Reel> searched = reelSvc.search(query, filter);
+        Map<String, Object> response = new HashMap<>();
+        for (Reel reel : searched) {
+            List<Object> info = new ArrayList<>();
+            info.add(reel.getTitle());
+            info.add(reel.getContents());
+
+            response.put(reel.getReelId(), info);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

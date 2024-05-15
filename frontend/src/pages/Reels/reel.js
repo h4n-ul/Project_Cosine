@@ -16,7 +16,6 @@ const Reel = () => {
       const response = await axios.get(`http://localhost:8080/backend/reel/${reel}`, {
         withCredentials: true
       });
-      console.log(response);
       return response.data;
     } catch (error) {
       console.error('Failed to fetch data:', error);
@@ -36,12 +35,11 @@ const Reel = () => {
     return (
       <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
         <div className='prose' style={{width: '60%'}}>
-          <h1 style={{margin: '10px', fontSize: '1.5rem', fontWeight: '900'}}>Loading...</h1>
-          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+          <h1 style={{margin: '10px', fontSize: '1.75rem', fontWeight: '900'}}>Loading...</h1>
+          <div>
             <p style={{marginLeft: '10px'}}>Loading...</p>
-            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: '10px'}}>
-              <p style={{fontWeight: '200', fontSize: '10px'}}>Loading...</p>
-            </div>
+            <p style={{fontWeight: '200', fontSize: '10px', marginLeft: '10px'}}>DR: 0 dB</p>
+            <p style={{fontWeight: '200', fontSize: '10px', marginLeft: '10px'}}>Loading...</p>
           </div>
         </div>
       </div>
@@ -51,12 +49,11 @@ const Reel = () => {
   return (
     <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
       <div className='prose' style={{width: '60%'}}>
-        <h1 style={{margin: '10px', fontSize: '1.5rem', fontWeight: '900'}}>{reelInfo.title}</h1>
-        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+        <h1 style={{margin: '10px', fontSize: '1.75rem', fontWeight: '900'}}>{reelInfo.title}</h1>
+        <div>
           <p style={{marginLeft: '10px'}}>{reelInfo.owner}</p>
-          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginRight: '10px'}}>
-            <p style={{fontWeight: '200', fontSize: '10px'}}>/b/{reelInfo.hallId}/{reelInfo.reelId}</p>
-          </div>
+          <p style={{fontWeight: '200', fontSize: '10px', marginLeft: '10px'}}>DR: {reelInfo.dynamicRange/10} dB</p>
+          <p style={{fontWeight: '200', fontSize: '10px', marginLeft: '10px'}}>/b/{reelInfo.hallId}/{reelInfo.reelId}</p>
         </div>
         {reelInfo.audio.length > 0 ? (
           <>

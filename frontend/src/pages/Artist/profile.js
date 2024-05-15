@@ -8,7 +8,6 @@ import { AuthContext } from '../../services/AuthContext';
 const Profile = () => {
   const { uid } = useParams()
   const auth = useContext(AuthContext);
-  console.log(auth.artistId, auth.isLoggedIn);
 
   const [profile, setProfile] = useState(null);
 
@@ -17,7 +16,6 @@ const Profile = () => {
       const response = await axios.get(`http://localhost:8080/backend/artist/${uid}`, {
         withCredentials: true
       });
-      console.log(response);
       return response.data;
     } catch (error) {
       console.error('Failed to fetch data:', error);

@@ -49,6 +49,7 @@ public class ReelService {
         target.setTitle(title);
         target.setContents(contents);
         target.setArtistId(artist.getUid());
+        target.setDynamicRange(0);
 
         List<FileArchive> fileArchiveList = new ArrayList<>();
         if (files != null) {
@@ -113,12 +114,11 @@ public class ReelService {
 
     @Transactional
     public Reel rework(@NonNull String rid, @NonNull Artist artist, String title, String contents, Hall hall, List<MultipartFile> files, List<AudioFiles> audioFiles) {
-        Reel target = new Reel();
+        Reel target = getReel(rid);
 
         SecureRandom random = new SecureRandom();
         byte[] p = new byte[32];
 
-        target.setReelId(rid);
         target.setTitle(title);
         target.setContents(contents);
         target.setArtistId(artist.getUid());
@@ -200,5 +200,32 @@ public class ReelService {
         Optional<Reel> reel = reelRepo.findById(mid);
         if (reel.isPresent()) return reel.get();
         return null;
+    }
+
+    public Reel increaseDR(String mid) {
+        Optional<Reel> reel = reelRepo.findById(mid);
+        if (reel.isPresent()){
+            Reel r = reel.get();
+            r.increaseDynamicRange();
+            reelRepo.save(r);
+            return r;
+        }
+        return null;
+    }
+
+    public List<Reel> search(String query, String filter) {
+        List<Reel> reelList;
+        if (filter.equals("title")) {
+            reelList = reelRepo.findByTitleContaining(query);
+        } else if (filter.equals("contents")) {
+            reelList = reelRepo.findByContentsContaining(query);
+        } else {
+            return null;
+        }
+        return reelList;
+    }
+
+    public void incinerate(String rid) {
+        reelRepo.deleteById(rid);
     }
 }

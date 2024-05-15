@@ -3,6 +3,14 @@ import '../main.css'
 import axios from 'axios';
 import videojs from 'video.js';
 
+const formatTime = (time) => {
+  const minutes = Math.floor(time / 60);
+  const seconds = Math.floor(time % 60);
+  const milliseconds = Math.floor((time % 1) * 1000);
+
+  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(3, '0')}`;
+}
+
 function AudioPlayer({streamId, title, artist}) {
     const audioRef = useRef(null);
     const [player, setPlayer] = useState(null);
@@ -12,9 +20,19 @@ function AudioPlayer({streamId, title, artist}) {
     useEffect(() => {
         let isMounted = true;
         const vjsPlayer = videojs(audioRef.current, { controls: true });
+        let rafId;
 
-        vjsPlayer.on('timeupdate', () => {
-            setProgress(vjsPlayer.currentTime() / vjsPlayer.duration());
+        const updateTime = () => {
+          setProgress(audioRef.current.currentTime / audioRef.current.duration);
+          rafId = requestAnimationFrame(updateTime);
+        };
+      
+        audioRef.current.addEventListener('play', () => {
+          rafId = requestAnimationFrame(updateTime);
+        });
+      
+        audioRef.current.addEventListener('pause', () => {
+          cancelAnimationFrame(rafId);
         });
 
         setPlayer(vjsPlayer);
@@ -29,7 +47,6 @@ function AudioPlayer({streamId, title, artist}) {
                 const audioBlob = new Blob([response.data], { type: mediaType });
                 const audioUrl = URL.createObjectURL(audioBlob);
                 vjsPlayer.src({ type: mediaType, src: audioUrl });
-                console.log(audioBlob)
             }
         });
 
@@ -69,10 +86,11 @@ function AudioPlayer({streamId, title, artist}) {
 
     return (
         <div style={{margin: '10px'}}>
-            <div data-vjs-player>
+            <div data-vjs-player style={{display: 'none'}}>
                 <audio ref={audioRef} className="video-js"></audio>
             </div>
-            <p style={{fontWeight: '400', fontSize: '12px', marginBottom: '10px'}}>{title} - {artist}</p>
+            <p style={{fontWeight: '400', fontSize: '12px', marginBottom: '10px'}}>{title} - {artist.join(', ')}</p>
+            {audioRef == null ? <p style={{fontWeight: '400', fontSize: '12px', marginBottom: '10px'}}>{formatTime(audioRef.current.currentTime)} / {formatTime(audioRef.current.duration)}</p> : null}
             <div style={{display: 'flex', alignItems: 'center'}}>
                 <button className='btn' onClick={togglePlay}>{playing ? 'Pause' : 'Play'}</button>
                 <input type="range" min={0} max="1" step="any" className="range range-sm w-80" value={progress} onChange={handleSliderChange} 

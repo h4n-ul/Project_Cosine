@@ -5,9 +5,9 @@ import { AuthContext } from '../../services/AuthContext';
 import showMetadataModal from './metamodal';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-// import ImageResize from 'quill-image-resize-module';
+import ImageResize from 'quill-image-resize';
 
-// Quill.register('modules/imageResize', ImageResize)
+Quill.register('modules/ImageResize', ImageResize)
 
 const Workroom = () => {
   const { hall, reel } = useParams()
@@ -24,7 +24,6 @@ const Workroom = () => {
           const response = await axios.get(`http://localhost:8080/backend/reel/${reel}`, {
             withCredentials: true
           });
-          console.log(response);
           setTitle(response.data.title);
           setContents(response.data.contents);
           setFiles(response.data.files);
@@ -154,9 +153,9 @@ const modules = {
   
     ['clean']                                         // remove formatting button
   ],
-  // ImageResize: {
-  // 	parchment: Quill.import('parchment')
-  // }
+  ImageResize: {
+  	parchment: Quill.import('parchment')
+  }
 };
 
 const formats = [

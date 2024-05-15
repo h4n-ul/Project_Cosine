@@ -40,6 +40,7 @@ const Register = ({ setForm }) => {
     <form onSubmit={handleSubmit}>
       <div>
         <input 
+          id="id"
           placeholder="ID" 
           className="input input-bordered w-96" 
           value={artistId} 
@@ -47,7 +48,7 @@ const Register = ({ setForm }) => {
         />
       </div>
       <div>
-        <input 
+        <input
           placeholder="Email" 
           className="input input-bordered w-96" 
           value={email} 
@@ -56,6 +57,7 @@ const Register = ({ setForm }) => {
       </div>
       <div>
         <input 
+          id="password"
           placeholder="Password" 
           className="input input-bordered w-96" 
           type="password"

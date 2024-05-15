@@ -2,11 +2,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import { StreamProvider, StreamContext } from '../services/StreamContext';
 
 const AudioCard = ({ title, artist, image, src }) => {
-  const { setStreamId, setTitle, setArtist, setAlbum } = useContext(StreamContext);
+  const stream = useContext(StreamContext);
   const handlePlay = () => {
-    setStreamId(src)
-    setTitle(title)
-    setArtist(artist)
+    stream.setStreamId(src)
+    stream.setTitle(title)
+    stream.setArtist(artist)
+  }
+
+  if (stream.streamId === null) {
+    handlePlay()
   }
 
   return (
@@ -15,7 +19,7 @@ const AudioCard = ({ title, artist, image, src }) => {
         <h2 className="card-title">{title}</h2>
         <p>{artist}</p>
         <div className="card-actions justify-end">
-          <button className="btn btn-neutral" onClick={handlePlay(src)}>Play</button>
+          <button className="btn btn-neutral" onClick={() => handlePlay(src)}>Play</button>
         </div>
       </div>
     </div>

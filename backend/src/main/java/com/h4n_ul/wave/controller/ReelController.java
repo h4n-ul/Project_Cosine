@@ -23,6 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,7 +57,8 @@ public class ReelController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Map<String, Object>> getReel(@PathVariable("id") String id) {
+    public ResponseEntity<Map<String, Object>> getReel(HttpServletRequest request, @PathVariable("id") String id) {
+        HttpSession session = request.getSession(false);
         Reel reel = reelSvc.getReel(id);
         Map<String, Object> response = new HashMap<>();
         if (reel == null) {
@@ -64,16 +66,19 @@ public class ReelController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        reel.setArtistId(artistSvc.getArtistByUid(reel.getArtistId()).getArtistNname());
+        if (!((String)session.getAttribute("loginArtistUid")).equals(reel.getArtistId())) {
+            reelSvc.increaseDR(id);
+        }
 
         response.put("title", reel.getTitle());
         response.put("contents", reel.getContents());
-        response.put("owner", reel.getArtistId());
+        response.put("owner", artistSvc.getArtistByUid(reel.getArtistId()).getArtistNname());
         response.put("reelId", reel.getReelId());
         response.put("release", reel.getRelease());
         response.put("lastRework", reel.getLastRework());
         response.put("master", reel.getMaster());
         response.put("degausse", reel.getDegausse());
+        response.put("dynamicRange", reel.getDynamicRange()+1);
         response.put("hallId", hallSvc.getHallById(reel.getHallId()).getSrc());
 
         if (reel.getFiles() != null) {
@@ -128,11 +133,15 @@ public class ReelController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("incinerate")
-    public Reel incinerate(HttpServletRequest request, String id) {
-        // HttpSession session = request.getSession();
-        // String loginArtistUid = (String) session.getAttribute("loginArtistUid");
-        // reelSvc.createReel(loginArtistUid, title, contents, null);
-        return null;
+    @DeleteMapping("incinerate")
+    public ResponseEntity<Map<String, Object>> incinerate(HttpServletRequest request, String id) {
+        HttpSession session = request.getSession();
+        String loginArtistUid = (String) session.getAttribute("loginArtistUid");
+        Reel reel = reelSvc.getReel(id);
+        if (loginArtistUid != reel.getArtistId()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        reelSvc.incinerate(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

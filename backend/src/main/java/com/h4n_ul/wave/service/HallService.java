@@ -1,6 +1,7 @@
 package com.h4n_ul.wave.service;
 
 import java.security.SecureRandom;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -30,6 +31,8 @@ public class HallService {
         target.setDescription(desc);
         target.setManager(uid);
         target.setSrc(src);
+        target.setPopularity(0);
+        target.setPopularityBuffer(new HashSet<>());
 
         hRepo.save(target);
         return target;

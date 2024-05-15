@@ -7,7 +7,6 @@ import { AuthContext } from '../services/AuthContext'
 
 const Header = () => {
   const auth = useContext(AuthContext);
-  console.log(auth.artistId, auth.isLoggedIn);
 
   const handleLogout = async () => {
     try {

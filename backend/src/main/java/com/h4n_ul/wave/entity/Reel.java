@@ -41,4 +41,8 @@ public class Reel {
     private LocalDateTime lastRework;
 
     private Integer dynamicRange;
+
+    public void increaseDynamicRange() {
+        this.dynamicRange++;
+    }
 }
