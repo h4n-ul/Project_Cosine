@@ -22,7 +22,7 @@ const Register = ({ setForm }) => {
       return;
     }
 
-    const response = await fetch('http://localhost:8080/backend/artist/register', {
+    const response = await fetch('http://localhost:7531/api/artist/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
       const checkLoginStatus = async () => {
         try {
-          const response = await axios.get('http://localhost:8080/backend/artist/getLoginInfo', {
+          const response = await axios.get('http://localhost:7531/api/artist/getLoginInfo', {
             withCredentials: true
           });
           setIsLoggedIn(response.data.sessionId !== '');

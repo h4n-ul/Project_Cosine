@@ -21,7 +21,7 @@ const Workroom = () => {
     const fetchData = async () => {
       if (reel) {
         try {
-          const response = await axios.get(`http://localhost:8080/backend/reel/${reel}`, {
+          const response = await axios.get(`http://localhost:7531/api/reel/${reel}`, {
             withCredentials: true
           });
           setTitle(response.data.title);
@@ -76,7 +76,7 @@ const Workroom = () => {
     });
   
     if (reel) {
-      const response = await axios.put(`http://localhost:8080/backend/reel/rework/${reel}`, formData, {
+      const response = await axios.put(`http://localhost:7531/api/reel/rework/${reel}`, formData, {
         header: {
           'Content-Type': 'multipart/form-data'
         },
@@ -88,7 +88,7 @@ const Workroom = () => {
       }
     }
     else {
-      const response = await axios.post('http://localhost:8080/backend/reel/record', formData, {
+      const response = await axios.post('http://localhost:7531/api/reel/record', formData, {
         header: {
           'Content-Type': 'multipart/form-data'
         },

@@ -13,7 +13,7 @@ const Profile = () => {
 
   const getProfile = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/backend/artist/${uid}`, {
+      const response = await axios.get(`http://localhost:7531/api/artist/${uid}`, {
         withCredentials: true
       });
       return response.data;

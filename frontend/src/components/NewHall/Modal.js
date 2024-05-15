@@ -12,7 +12,7 @@ const NewHall = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8080/backend/hall/create",
+        "http://localhost:7531/api/hall/create",
         { hallName: htitle, description: hdesc, src: hsrc },
         { withCredentials: true }
       );

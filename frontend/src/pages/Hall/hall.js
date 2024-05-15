@@ -9,7 +9,7 @@ const Hall = () => {
 
   const getHall = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/backend/hall/${hall}`, {
+      const response = await axios.get(`http://localhost:7531/api/hall/${hall}`, {
         withCredentials: true
       });
       console.log(response);

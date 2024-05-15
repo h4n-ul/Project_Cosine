@@ -11,7 +11,7 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:8080/backend/artist/logout",
+        "http://localhost:7531/api/artist/logout",
         {},
         { withCredentials: true }
       );
@@ -25,7 +25,7 @@ const Header = () => {
   const handleSearch = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8080/backend/search",
+        "http://localhost:7531/api/search",
         {},
         { withCredentials: true }
       );

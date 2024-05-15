@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/backend/reel")
+@RequestMapping("/api/reel")
 public class ReelController {
     private final ArtistService artistSvc;
     private final ReelService reelSvc;

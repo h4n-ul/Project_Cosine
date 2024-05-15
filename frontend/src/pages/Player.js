@@ -38,7 +38,7 @@ function AudioPlayer({streamId, title, artist}) {
         setPlayer(vjsPlayer);
 
         axios({
-            url: `http://localhost:8080/backend/stream/${streamId}`,
+            url: `http://localhost:7531/api/stream/${streamId}`,
             method: 'GET',
             responseType: 'blob',
         }).then(response => {

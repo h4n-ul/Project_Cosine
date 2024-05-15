@@ -13,7 +13,7 @@ const Reel = () => {
 
   const getReel = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/backend/reel/${reel}`, {
+      const response = await axios.get(`http://localhost:7531/api/reel/${reel}`, {
         withCredentials: true
       });
       return response.data;

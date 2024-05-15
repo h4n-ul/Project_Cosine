@@ -1,3 +1,6 @@
+server:
+  port: 7531
+
 spring:
   servlet:
     multipart:
@@ -11,7 +14,7 @@ spring:
       enabled: true
       path: /h2-console
   datasource:
-    url: jdbc:h2:~/local
+    url: jdbc:h2:~/PCOSINE
     driverClassName: org.h2.Driver
     username: h2WAVE
     password: YILkxzQaeED6UnDVq9KmDyawMYe0tegzsCzszjdwuz4=
@@ -29,13 +32,13 @@ spring:
 # JWT
 # jwt.secret.key=x!A%D*G-KaPdSgVkYp3s5v8y/B?E(H+M
 
-# # DATABASE
+# DATABASE
 #   h2:
 #     console:
 #       enabled: true
 #       path: /h2-console
 #   datasource:
-#     url: jdbc:mysql://localhost:3306/sbb?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+#     url: jdbc:mysql://localhost:3306/PCOSINE?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
 #     driverClassName: com.mysql.cj.jdbc.Driver
 #     username: MariaWave
 #     password: j9c/l1I5NqTxE3jpKCbRtvS5Fhe2mFL3fB0s5uadnIA=
@@ -47,5 +50,4 @@ spring:
 #     properties:
 #       hibernate:
 #         dialect: org.hibernate.dialect.MySQL8Dialect
-#         format_sql: true
-#         show_sql: true
+#         "[format_sql]": true

@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/backend/search")
+@RequestMapping("/api/search")
 public class SearchController {
     private final HallService hallSvc;
     private final ReelService reelSvc;

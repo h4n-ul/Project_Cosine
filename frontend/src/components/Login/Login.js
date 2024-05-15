@@ -9,7 +9,7 @@ const Login = ({ setForm }) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8080/backend/artist/login",
+        "http://localhost:7531/api/artist/login",
         { artistId, password },
         { withCredentials: true }
       );

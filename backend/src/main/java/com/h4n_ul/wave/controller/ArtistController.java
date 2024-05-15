@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/backend/artist")
+@RequestMapping("/api/artist")
 public class ArtistController {
     public final ArtistService artistSvc;
     public final ArtistRepo artistRepo;
