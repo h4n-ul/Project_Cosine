@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("backend/stream")
+@RequestMapping("/api/stream")
 public class Player {
     private final AudiRepo audiRepo;
     // private final FileService fileService;
