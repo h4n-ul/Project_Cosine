@@ -1,6 +1,25 @@
+import React, { useEffect, useState } from "react";
 import Card from "./Card";
+import axios from 'axios';
 
 const PopularHalls = () => {
+
+  const [halls, setHalls] = useState([{}]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:7531/api/hall/popular`, {
+          withCredentials: true
+        });
+        console.log(response.data);
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      }
+    };
+    fetchData();
+  }, []);
+  
   const cards = [
     { id: 1, name: '', contents: '', src: "https://daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.jpg" },
     { id: 2, name: '', contents: '', src: "https://daisyui.com/images/stock/photo-1565098772267-60af42b81ef2.jpg" },
