@@ -2,11 +2,13 @@ import React, { useState, useEffect, useContext } from 'react';
 import Modal from './Login/Modal';
 import axios from 'axios';
 import NewHall from './NewHall/Modal';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../services/AuthContext'
 
 const Header = () => {
   const auth = useContext(AuthContext);
+  const [query, setQuery] = useState('');
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -24,12 +26,8 @@ const Header = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:7531/api/search",
-        {},
-        { withCredentials: true }
-      );
-      console.log(response);
+      console.log(query)
+      navigate(`/search?query=${query}`)
     } catch (error) {
       console.error("Search failed:", error.response.data.message);
     }
@@ -42,7 +40,7 @@ const Header = () => {
         <div tabIndex={0} role="button" className="m-1">Search</div>
         <div tabIndex={0} className="dropdown-content z-[1] card card-compact w-64 p-2 shadow ">
           <form onSubmit={handleSearch}>
-            <input type="text" placeholder="Type here" className="input w-full max-w-xs" />
+            <input type="text" value={query} placeholder="Search" onChange={(e) => setQuery(e.target.value)} className="input w-full max-w-xs" />
           </form>
         </div>
       </div>

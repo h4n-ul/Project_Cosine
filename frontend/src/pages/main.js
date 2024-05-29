@@ -11,6 +11,7 @@ import Workroom from './Workroom/workroom';
 import { StreamProvider, StreamContext } from '../services/StreamContext';
 import AudioPlayer from './Player';
 import { AuthContext } from '../services/AuthContext';
+import Search from './Search/search';
 
 const Main = () => {
   return (
@@ -22,7 +23,7 @@ const Main = () => {
 
 const MainContents = () => {
   const data = useContext(StreamContext);
-  console.log(data); // { streamId, setStreamId } 또는 undefined
+  console.log(data);
 
   return (
     <BrowserRouter>
@@ -34,6 +35,7 @@ const MainContents = () => {
         <Route path="/workroom/:hall" element={<Workroom />}></Route>
         <Route path="/workroom/:hall/:reel" element={<Workroom />}></Route>
         <Route path="/b/:hall/:reel" element={<Reel />}></Route>
+        <Route path="/search" element={<Search />}></Route>
         <Route path="/*" element={<NotFound />}></Route>
       </Routes>
       {data.streamId != null ? 

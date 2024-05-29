@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import axios from 'axios';
 
 const NewHall = () => {
@@ -16,7 +16,7 @@ const NewHall = () => {
         { hallName: htitle, description: hdesc, src: hsrc },
         { withCredentials: true }
       );
-      navigate(`/b/${hsrc}`);
+      return <Navigate to={`/b/${hsrc}`}/>;
     } catch (error) {
       console.error("Failed:", error.response.data.message);
     }

@@ -1,6 +1,7 @@
 package com.h4nul.prjcosine.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,7 +34,7 @@ public class Player {
     private final Tika tika = new Tika();
 
     @GetMapping("/{id}")
-    public ResponseEntity<ByteArrayResource> stream(@PathVariable String id, HttpServletRequest request) throws Exception {
+    public ResponseEntity<ByteArrayResource> stream(@PathVariable String id, HttpServletRequest request) throws IOException {
         AudioArchs audio = audiRepo.findById(id).orElse(null);
         File file = new File(audio.getLocation());
         Path path = Paths.get(file.getAbsolutePath());

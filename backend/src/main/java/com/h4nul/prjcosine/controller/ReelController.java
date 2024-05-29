@@ -66,7 +66,7 @@ public class ReelController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        if (!((String)session.getAttribute("loginArtistUid")).equals(reel.getArtistId())) {
+        if (session == null || !((String)session.getAttribute("loginArtistUid")).equals(reel.getArtistId())) {
             reelSvc.increaseDR(id);
         }
 
@@ -143,5 +143,29 @@ public class ReelController {
         }
         reelSvc.incinerate(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("getByArtist/{id}")
+    public ResponseEntity<Map<String, Object>> getByArtist(@PathVariable("id") String id) {
+        if (artistSvc.getArtistByUid(id) == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Map<String, Object> response = new HashMap<>();
+        reelSvc.getAllByArtist(id).forEach(
+            reel -> {
+                response.put("title", reel.getTitle());
+                response.put("contents", reel.getContents());
+                response.put("owner", artistSvc.getArtistByUid(reel.getArtistId()).getArtistNname());
+                response.put("reelId", reel.getReelId());
+                response.put("release", reel.getRelease());
+                response.put("lastRework", reel.getLastRework());
+                response.put("master", reel.getMaster());
+                response.put("degausse", reel.getDegausse());
+                response.put("dynamicRange", reel.getDynamicRange()+1);
+                response.put("hallId", hallSvc.getHallById(reel.getHallId()).getSrc());
+            }
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

@@ -196,6 +196,11 @@ public class ReelService {
         return reellist;
     }
 
+    public List<Reel> getAllByArtist(String artistId) {
+        List<Reel> reellist = reelRepo.findByArtistId(artistId);
+        return reellist;
+    }
+
     public Reel getReel(@NonNull String mid) {
         Optional<Reel> reel = reelRepo.findById(mid);
         if (reel.isPresent()) return reel.get();

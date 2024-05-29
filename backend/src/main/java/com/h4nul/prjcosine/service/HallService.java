@@ -24,7 +24,7 @@ public class HallService {
         Hall target = new Hall();
 
         random.nextBytes(p);
-        String hid = Base64.encodeBase64String(p).replace("/", "_");;
+        String hid = Base64.encodeBase64String(p).replace("/", "_");
 
         target.setHallId(hid);
         target.setTitle(hallName);
@@ -33,6 +33,23 @@ public class HallService {
         target.setSrc(src);
         target.setPopularity(0);
         target.setPopularityBuffer(new HashSet<>());
+
+        hRepo.save(target);
+        return target;
+    }
+
+    public Hall modify(String hallName, String desc, String src, @NonNull String uid) {
+        SecureRandom random = new SecureRandom();
+        byte[] p = new byte[32];
+        Hall target = hRepo.findBySrc(src).orElse(null);
+        if (target == null) {return null;}
+
+        random.nextBytes(p);
+
+        target.setTitle(hallName);
+        target.setDescription(desc);
+        target.setManager(uid);
+        target.setSrc(src);
 
         hRepo.save(target);
         return target;
